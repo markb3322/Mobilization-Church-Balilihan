@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobilization Church Balilihan - Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .registration-card {
+            max-width: 850px;
+            margin: 0 auto;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            border: none;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 40px 35px;
+            border-bottom: 4px solid #38bdf8;
+        }
+        
+        .header-section h1 {
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            font-size: 1.9rem;
+        }
+        
+        .header-section p {
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-body-custom {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-label i {
+            margin-right: 6px;
+            color: #3b82f6;
+        }
+        
+        .form-control {
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            transition: all 0.2s;
+            background-color: #fefefe;
+            font-size: 0.95rem;
+        }
+        
+        .form-control:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #38bdf8;
+            display: inline-block;
+        }
+        
+        hr {
+            margin: 25px 0;
+            border-top: 2px dashed #e2e8f0;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(95deg, #0f172a, #1e3a8a);
+            border: none;
+            padding: 14px 28px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 40px;
+            width: 100%;
+            transition: all 0.3s;
+            color: white;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(95deg, #1e293b, #2563eb);
+            box-shadow: 0 15px 25px -8px rgba(37, 99, 235, 0.4);
+        }
+        
+        .modal-content {
+            border-radius: 24px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            border-bottom: none;
+            padding: 20px 25px;
+        }
+        
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+        
+        .modal-title {
+            font-weight: 700;
+        }
+        
+        .modal-body {
+            padding: 25px;
+            background: #f8fafc;
+        }
+        
+        .email-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 15px;
+        }
+        
+        .email-preview p {
+            margin-bottom: 0;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .footer-modal {
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            padding: 15px 25px;
+        }
+        
+        .btn-send {
+            background: #22c55e;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+        }
+        
+        .btn-send:hover {
+            background: #16a34a;
+            transform: scale(1.02);
+        }
+        
+        .btn-secondary-custom {
+            background: #e2e8f0;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        .role-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-body-custom {
+                padding: 25px;
+            }
+            .header-section {
+                padding: 30px 25px;
+            }
+            .header-section h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card registration-card">
+        <div class="header-section text-center">
+            <h1 class="fw-bold"><i class="fas fa-church me-2"></i> Mobilization Church Balilihan</h1>
+            <p class="mt-3">Welcome to our community! Please fill out the form below to register and stay connected with our latest events and spiritual growth programs. We look forward to walking this journey of faith together.</p>
+            <p>Your information is kept secure and used solely for church mobilization and communication purposes. Join us as we serve the community of Balilihan with love and purpose.</p>
+        </div>
+
+        <div class="card-body-custom">
+            <form id="regForm">
+                <!-- Step 1: Media Upload has been REMOVED completely -->
+                
+                <div class="d-flex align-items-center mb-4">
+                    <i class="fas fa-user me-2 text-primary"></i>
+                    <h5 class="section-title mb-0">Personal Information</h5>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-8 mb-3 mb-md-0">
+                        <label class="form-label"><i class="fas fa-signature"></i> Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="e.g., Maria Concepcion R. Santos" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label"><i class="fas fa-smile"></i> Nickname</label>
+                        <input type="text" class="form-control" id="nickname" placeholder="e.g., Maricon">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-map-marker-alt"></i> Full Address</label>
+                    <textarea class="form-control" id="address" rows="2" placeholder="House #, Street, Barangay, Balilihan, Bohol" required></textarea>
+                </div>
+
+                <!-- EMAIL FIELD - ADDED (NEW) -->
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" class="form-control" id="emailAddress" placeholder="youremail@example.com" required>
+                    <div class="form-text text-muted" style="font-size: 0.7rem;">Where the church can reply to you.</div>
+                </div>
+
+                <!-- ROLE SECTION - MEMBER ONLY (fixed selection) -->
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-tag"></i> Role</label>
+                    <select class="form-control" id="role" style="background-color: #fefefe;" required>
+                        <option value="Member" selected>🙏 Member (Church Attendee)</option>
+                    </select>
+                    <div class="role-badge mt-2">
+                        <i class="fas fa-info-circle me-1"></i> Current role: Member only
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-5 mb-3 mb-md-0">
+                        <label class="form-label"><i class="fas fa-calendar-alt"></i> Birthday</label>
+                        <input type="date" class="form-control" id="birthday" onchange="calculateAge()" required>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label"><i class="fas fa-map-pin"></i> Birth Place</label>
+                        <input type="text" class="form-control" id="birthplace" placeholder="e.g., Balilihan, Bohol" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label"><i class="fas fa-calculator"></i> Age</label>
+                        <input type="text" class="form-control" id="age" readonly style="background-color: #eef2ff; font-weight: 500;">
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="button" class="btn btn-primary-custom" onclick="prepareModal()">
+                        <i class="fas fa-paper-plane me-2"></i> Show Modal & Confirm Registration
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for confirmation -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-envelope me-2"></i> Confirm Registration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="email-preview">
+                    <p id="emailBody1"></p>
+                </div>
+                <div class="email-preview">
+                    <p id="emailBody2"></p>
+                </div>
+            </div>
+            <div class="footer-modal d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i> Close</button>
+                <button type="button" class="btn btn-send" onclick="sendEmail()"><i class="fas fa-paper-plane me-1"></i> Send & Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Calculate age based on birthday (original logic kept)
+    function calculateAge() {
+        const birthDate = new Date(document.getElementById('birthday').value);
+        if (isNaN(birthDate)) return;
+        
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        document.getElementById('age').value = age;
+    }
+
+    // Prepare modal with email content (original logic + role + NEW email field)
+    function prepareModal() {
+        const name = document.getElementById('fullName').value || "Applicant";
+        const nickname = document.getElementById('nickname').value || "N/A";
+        const age = document.getElementById('age').value || "N/A";
+        const role = document.getElementById('role').value; // always "Member"
+        const address = document.getElementById('address').value || "Not provided";
+        const birthplace = document.getElementById('birthplace').value || "Not provided";
+        const userEmail = document.getElementById('emailAddress').value || "Not provided";
+        
+        // Validation: ensure Full Name is filled (same original logic)
+        if(!document.getElementById('fullName').value) {
+            alert("Please fill in the Full Name first.");
+            return;
+        }
+        
+        if(!document.getElementById('birthday').value) {
+            alert("Please select your birthday.");
+            return;
+        }
+        
+        if(!document.getElementById('address').value) {
+            alert("Please provide your full address.");
+            return;
+        }
+        
+        if(!document.getElementById('birthplace').value) {
+            alert("Please provide your birth place.");
+            return;
+        }
+        
+        // NEW VALIDATION: Check if email is provided
+        if(!document.getElementById('emailAddress').value) {
+            alert("Please provide your email address.");
+            return;
+        }
+        
+        // Validate email format
+        const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+        if (!emailPattern.test(userEmail)) {
+            alert("Please provide a valid email address (e.g., name@example.com).");
+            return;
+        }
+        
+        // Paragraph 1 (enhanced with role, address, and email)
+        document.getElementById('emailBody1').innerHTML = 
+            `📧 <strong>Dear Mobilization Church Team</strong>,<br><br>
+            I am <strong>${name}</strong> (known as <strong>${nickname}</strong>), age <strong>${age}</strong>, and my role is <strong>${role}</strong>. 
+            I am writing to formally submit my registration. I am eager to join the church activities in Balilihan and contribute to the growth of our faith community.`;
+        
+        // Paragraph 2 (detailed with address, birth place, and email)
+        document.getElementById('emailBody2').innerHTML = 
+            `📍 <strong>My complete address is:</strong> ${address}.<br>
+            🎂 <strong>Birth place:</strong> ${birthplace}.<br>
+            📧 <strong>My email address:</strong> ${userEmail}.<br><br>
+            Please find my details for your church records. I look forward to receiving updates and instructions on how I can participate in the upcoming mobilization efforts and spiritual growth programs. 
+            Thank you for welcoming me into this community.`;
+
+        const myModal = new bootstrap.Modal(document.getElementById('emailModal'));
+        myModal.show();
+    }
+
+    // Send email function (opens default email client with pre-filled content)
+    function sendEmail() {
+        const churchEmail = "mobilizationchurchb@gmail.com";
+        const name = document.getElementById('fullName').value || "Applicant";
+        const userEmail = document.getElementById('emailAddress').value || "";
+        const subject = "New Church Registration - " + name + " (" + userEmail + ")";
+        
+        // Get the detailed body from modal (preserve formatting)
+        const bodyText1 = document.getElementById('emailBody1').innerText || document.getElementById('emailBody1').textContent;
+        const bodyText2 = document.getElementById('emailBody2').innerText || document.getElementById('emailBody2').textContent;
+        const fullBody = bodyText1 + "\n\n" + bodyText2 + "\n\n🙏 God bless and thank you!";
+        
+        // Use mailto: which opens default email app (for mobile it opens Gmail if configured)
+        window.location.href = `mailto:${churchEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+        
+        // Optional: close modal after sending
+        const modalElement = document.getElementById('emailModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+        
+        // Brief feedback
+        alert("✅ Email client opened! Please review and send the message to complete your registration.\n\nThank you for joining Mobilization Church Balilihan!");
+    }
+</script>
+</body>
+</html>
