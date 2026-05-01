@@ -87,11 +87,6 @@
             color: #3b82f6;
         }
 
-        .input-group-custom {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
         .form-control {
             border-radius: 14px;
             padding: 0.85rem 1rem;
@@ -238,6 +233,33 @@
             background: #16a34a;
             transform: scale(1.01);
         }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .spinner-border {
+            width: 50px;
+            height: 50px;
+        }
     </style>
 </head>
 <body>
@@ -256,7 +278,7 @@
 
         <!-- Login Form -->
         <div class="form-body">
-            <form action="process/login_process.html" method="POST" id="loginForm">
+            <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label"><i class="fas fa-user"></i> Username / Email</label>
                     <input type="text" class="form-control" id="loginUsername" placeholder="Enter your username or email" required>
@@ -279,7 +301,7 @@
                     </a>
                 </div>
 
-                <button type="submit" class="btn btn-login">
+                <button type="submit" class="btn-login">
                     <i class="fas fa-sign-in-alt me-2"></i> Login
                 </button>
             </form>
@@ -320,21 +342,26 @@
     </div>
 </div>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 mb-0">Authenticating...</p>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Function to generate 2 professional paragraphs for password reset request
     function generateForgotPasswordEmailBody(userEmail, userNameExtracted) {
-        const date = new Date();
-        const formattedDate = date.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
-        
-        // First paragraph: polite request + identification
         const paragraph1 = `Dear Mobilization Church Admin,
 
 I am writing to request a password reset for my church portal account. I am unable to access my account, and I would greatly appreciate your assistance in recovering my login credentials. My registered email address is: ${userEmail}.
 
 Please let me know the next steps or send a password reset link to this email address. I need to regain access to stay connected with church updates, events, and mobilization activities here in Balilihan.`;
         
-        // Second paragraph: additional details & gratitude
         const paragraph2 = `I kindly ask for your guidance on how to proceed with resetting my password. If additional verification is required, please inform me. I value my participation in Mobilization Church Balilihan and look forward to continuing my spiritual journey with the community.
 
 Thank you for your understanding and prompt response. May God bless your ministry and the entire church congregation.
@@ -355,64 +382,174 @@ ${userNameExtracted || "Church Member"}
             return;
         }
         
-        // Basic email validation
         const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
         if (!emailPattern.test(emailInput)) {
             alert("❌ Please enter a valid email address (e.g., name@example.com).");
             return;
         }
         
-        // Extract a simple name from email (optional for greeting)
         let userName = emailInput.split('@')[0];
         userName = userName.replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         
-        // Auto-generate the two paragraph message
         const fullMessage = generateForgotPasswordEmailBody(emailInput, userName);
-        
-        // Church recipient email
         const churchEmail = "mobilizationchurchb@gmail.com";
         const subject = `PASSWORD RESET REQUEST - ${userName} (${emailInput})`;
-        
-        // Build mailto URL
         const mailtoLink = `mailto:${churchEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullMessage)}`;
         
-        // Open default email client (Gmail app on mobile, mail client on desktop)
         window.location.href = mailtoLink;
         
-        // Close the modal after sending
         const modalElement = document.getElementById('forgotModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         if (modalInstance) {
             modalInstance.hide();
         }
         
-        // Show success alert
-        alert("✅ Password reset request prepared!\n\n📧 Your email client will open with a pre-filled message for mobilizationchurchb@gmail.com.\n\n🔍 Please review the message click SEND. Church admin will reply to your email with reset instructions.\n\nThank you!");
-        
-        // Clear forgot email field
+        alert("✅ Password reset request prepared!\n\n📧 Your email client will open with a pre-filled message.\n\n🔍 Review and click SEND.\n\nChurch admin will reply to your email.");
         document.getElementById('forgotEmail').value = '';
     }
     
-    // Optional: simple client-side validation before submitting login form (just shows alert, but proceeds to login_process.html)
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // LOGIN PROCESSING using login_process.js via dynamic script import
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
         const username = document.getElementById('loginUsername').value.trim();
         const password = document.getElementById('loginPassword').value.trim();
         
         if (!username) {
-            e.preventDefault();
             alert("⚠️ Please enter your username or email.");
             return;
         }
         if (!password) {
-            e.preventDefault();
             alert("⚠️ Please enter your password.");
             return;
         }
         
-        // If remember me is checked, we could store something but process continues
-        // The action will go to process/login_process.html as requested
-        // No further modification, just allow submission
+        // Show loading overlay
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.style.visibility = 'visible';
+        
+        // Store credentials for processing
+        const loginData = { username, password };
+        
+        try {
+            // Dynamically load and execute login_process.js
+            // First, check if script already exists
+            const existingScript = document.querySelector('script[src="process/login_process.js"]');
+            if (existingScript) {
+                existingScript.remove();
+            }
+            
+            // Create a global callback handler for the login result
+            window.handleLoginResult = function(success, role, redirectUrl, errorMessage) {
+                overlay.style.visibility = 'hidden';
+                if (success) {
+                    // Store user info
+                    sessionStorage.setItem('userRole', role);
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('username', username);
+                    alert(`✅ Welcome! Redirecting to ${role} dashboard...`);
+                    window.location.href = redirectUrl;
+                } else {
+                    alert(`❌ Login Failed\n\n${errorMessage || 'Invalid username or password. Please try again.'}`);
+                }
+                delete window.handleLoginResult;
+            };
+            
+            // Load the login_process.js script
+            const script = document.createElement('script');
+            script.src = 'process/login_process.js?_t=' + Date.now(); // Cache bust
+            script.onload = function() {
+                // Script loaded, call the login function if available
+                if (typeof window.processChurchLogin === 'function') {
+                    window.processChurchLogin(username, password);
+                } else {
+                    // Fallback if the JS doesn't have the expected function
+                    console.warn("processChurchLogin not found, using demo fallback");
+                    demoLoginFallback(username, password);
+                }
+            };
+            script.onerror = function() {
+                overlay.style.visibility = 'hidden';
+                alert("❌ Error loading login processor.\n\nPlease ensure 'process/login_process.js' exists.\n\nUsing demo mode fallback.");
+                demoLoginFallback(username, password);
+            };
+            document.head.appendChild(script);
+            
+        } catch (error) {
+            overlay.style.visibility = 'hidden';
+            console.error("Login error:", error);
+            alert("❌ An error occurred during login. Please try again.");
+        }
     });
+    
+    // Demo fallback function (inline for testing when JS file missing)
+    function demoLoginFallback(username, password) {
+        // Demo credentials for testing
+        const lowerUsername = username.toLowerCase();
+        let role = null;
+        
+        // Check by email or username patterns
+        if (lowerUsername.includes('member') || password === 'member123' || lowerUsername === 'member') {
+            role = 'member';
+        } else if (lowerUsername.includes('music') || password === 'music123' || lowerUsername === 'music') {
+            role = 'music';
+        } else if (lowerUsername.includes('program') || password === 'program123' || lowerUsername === 'program') {
+            role = 'program';
+        } else if (lowerUsername.includes('pastor') || password === 'pastor123' || lowerUsername === 'pastor') {
+            role = 'pastor';
+        } else if (lowerUsername.includes('officer') || password === 'officer123' || lowerUsername === 'officer') {
+            role = 'officer';
+        } else if (password === 'demo123' || password === 'church123') {
+            role = 'member';
+        }
+        
+        if (role) {
+            sessionStorage.setItem('userRole', role);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('username', username);
+            alert(`✅ Demo Login Successful!\n\nWelcome ${username}\nRole: ${role}\nRedirecting to dashboard...`);
+            window.location.href = `${role}/index.html`;
+        } else {
+            document.getElementById('loadingOverlay').style.visibility = 'hidden';
+            alert(`❌ Demo Login Failed\n\nDemo Credentials:\n• Username: member / Password: member123\n• Username: music / Password: music123\n• Username: program / Password: program123\n• Username: pastor / Password: pastor123\n• Username: officer / Password: officer123`);
+        }
+    }
+    
+    // Remember me functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedUsername = localStorage.getItem('savedUsername');
+        const savedPassword = localStorage.getItem('savedPassword');
+        const rememberCheckbox = document.getElementById('rememberCheckbox');
+        
+        if (savedUsername && savedPassword) {
+            document.getElementById('loginUsername').value = savedUsername;
+            document.getElementById('loginPassword').value = savedPassword;
+            rememberCheckbox.checked = true;
+        }
+        
+        // Save credentials when checkbox is checked and form submitted
+        const originalSubmitHandler = document.getElementById('loginForm').submit;
+    });
+    
+    // Save remember me on successful login (will be called after validation)
+    window.saveRememberMe = function(username, password, remember) {
+        if (remember) {
+            localStorage.setItem('savedUsername', username);
+            localStorage.setItem('savedPassword', password);
+        } else {
+            localStorage.removeItem('savedUsername');
+            localStorage.removeItem('savedPassword');
+        }
+    };
+</script>
+
+<!-- Instruction for developer to create login_process.js -->
+<script>
+    (function() {
+        console.log("%c🔐 Mobilization Church Login Page", "color: #38bdf8; font-size: 14px; font-weight: bold;");
+        console.log("%cUsing login process: process/login_process.js", "color: #22c55e;");
+        console.log("%cPlease create the file 'process/login_process.js' with the required authentication logic.", "color: #f59e0b;");
+    })();
 </script>
 </body>
-  </html>
+</html>
