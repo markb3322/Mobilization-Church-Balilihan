@@ -1,1 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobilization Church Balilihan | Born Again Community</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8fafc;
+            color: #334155;
+        }
 
+        /* NAVIGATION BAR */
+        .navbar {
+            background-color: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #38bdf8 !important;
+        }
+        .nav-link {
+            color: #f8fafc !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin: 0 5px;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #38bdf8 !important;
+        }
+
+        /* HERO SECTION (HOME) */
+        #home {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+                        url('https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 15px;
+        }
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* SECTION STYLING */
+        section {
+            padding: clamp(50px, 8vw, 100px) 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .section-title {
+            font-weight: 800;
+            color: #0f172a;
+            position: relative;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: #38bdf8;
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* ABOUT US */
+        #about {
+            background-color: #ffffff;
+        }
+        .about-img {
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.3s ease;
+        }
+        .about-img:hover {
+            transform: scale(1.03);
+        }
+        .church-work-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        .church-work-card:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.1);
+        }
+
+        /* IMPORTANT SECTION & CONTACTS */
+        #important, #contact {
+            background-color: #f1f5f9;
+        }
+        .icon-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .icon-box:hover {
+            transform: translateY(-5px);
+        }
+        .icon-box i {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+
+        /* VISION, MISSION, GOALS */
+        #vmg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+        }
+        #vmg .section-title {
+            color: white;
+        }
+        .vmg-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 12px;
+            height: 100%;
+        }
+
+        /* POLICIES SECTION */
+        #policies {
+            background-color: #1e293b;
+            color: #cbd5e1;
+        }
+        #policies .section-title {
+            color: white;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 40px 0;
+            font-size: 0.9rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #38bdf8;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .footer-link {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .footer-link:hover {
+            color: #38bdf8;
+        }
+        .footer-text {
+            font-size: 0.85rem;
+            margin-top: 15px;
+        }
+        .social-icon-group {
+            margin-bottom: 20px;
+        }
+        /* remove programmer section completely */
+        #programmer {
+            display: none;
+        }
+        /* adjust spacing since programmer section removed */
+        #policies {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <i class="fa-solid fa-cross text-info me-2"></i> MCB
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-center">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#important">Why Important</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#vmg">Vision & Mission</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register.html"><i class="fa-solid fa-user-plus me-1"></i> Register</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-info btn-sm text-white px-3 fw-bold mt-1" href="login.html">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="home">
+        <div class="container">
+            <span class="hero-subtitle">Mobilization Church Balilihan</span>
+            <h1 class="hero-title">Worship The Lord In Spirit and Truth</h1>
+            <p class="fs-6 fs-md-5 mb-4 text-white-50 mx-auto" style="max-width: 600px;">Join our vibrant faith community in Balilihan. We are a Bible-believing Born Again church dedicated to serving God and transforming lives.</p>
+            <a href="register.html" class="btn btn-info btn-lg fw-bold text-white px-4 py-2 shadow">Be a Member Today</a>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="container text-center">
+            <h2 class="section-title">About Us</h2>
+            
+            <div class="row align-items-center text-start mt-4 mb-5">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <p class="lead fw-bold text-primary">Mobilization Church Balilihan – A Home for Every Believer.</p>
+                    <p>Mobilization Church Balilihan is a growing, spirit-filled Born Again Christian organization dedicated to spreading the Gospel and making disciples in Balilihan and beyond. Our system is designed to bridge technology and ministry, streamlining membership registration, data management, and activity coordination so we can focus on spiritual growth and community building.</p>
+                    <p>Through our digital platform, leaders can effectively track church growth, maintain transparent communication between fellowships, and ensure every member is engaged in discipleship tracks and church updates. We are committed to creating an organized, nurturing environment for all.</p>
+
+                    <p class="lead fw-bold text-primary mt-4">Why are you waiting to join us?</p>
+                    <p>Finding a spiritual home where you can authentically grow is one of the most important decisions you can make. Our church provides a safe haven for seekers and believers alike, extending a warm, non-judgmental embrace to everyone who wants to experience God's transforming love.</p>
+                    <p>Don't hesitate to take your next step of faith. By being a part of our church, you are not just attending services; you are becoming part of a loving family that prays together, serves together, and walks the journey of life side by side.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=2070" alt="Church Fellowship" class="about-img">
+                        </div>
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1511649475669-e288648b2339?q=80&w=2070" alt="Bible Study" class="about-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="fw-bold text-dark mt-5 mb-4">Our 10 Key Ministries & Activities</h3>
+            <div class="row g-4 text-start">
+                
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2070" alt="Sunday Worship" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-music me-2"></i>1. Sunday Worship</h5>
+                        <p class="text-secondary small mb-0">We gather every Sunday to praise and worship the Lord together through vibrant singing and the study of His Word.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070" alt="Life Groups" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-users-rectangle me-2"></i>2. Discipleship & Life Groups</h5>
+                        <p class="text-secondary small mb-0">Smaller groups meet for deeper Bible study, mutual support, and spiritual growth in faith.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=2070" alt="Outreach" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-heart me-2"></i>3. Community Outreach</h5>
+                        <p class="text-secondary small mb-0">We share God's love outside the church through feeding programs, gift-giving, and helping those in need.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070" alt="Men's Fellowship" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-person me-2"></i>4. Men's Fellowship</h5>
+                        <p class="text-secondary small mb-0">A fellowship for men to strengthen each other's faith, become good family leaders, and grow in God's word.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2070" alt="Women's Fellowship" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-person-dress me-2"></i>5. Women's Fellowship</h5>
+                        <p class="text-secondary small mb-0">A gathering of women for prayer, Bible study, and inspiring one another as partners in ministry.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?q=80&w=2070" alt="Youth Fellowship" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-children me-2"></i>6. Youth Fellowship</h5>
+                        <p class="text-secondary small mb-0">A vibrant community for young people to know Christ, develop talents, and build meaningful friendships.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=2070" alt="Praise and Worship" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-guitar me-2"></i>7. Praise & Worship Team</h5>
+                        <p class="text-secondary small mb-0">A group of singers and musicians dedicated to leading the congregation in deep and sincere worship.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=2070" alt="Night Revival" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-fire me-2"></i>8. Night Revival</h5>
+                        <p class="text-secondary small mb-0">Nights filled with fervent prayer, deep worship, and renewing the fire of faith.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1510312305653-8ed496efae75?q=80&w=2070" alt="Youth Camp" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-tent me-2"></i>9. Youth Camp</h5>
+                        <p class="text-secondary small mb-0">An annual outdoor church activity where young people experience a deeper encounter with God.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="church-work-card">
+                        <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=2070" alt="Sunday School" class="about-img mb-3">
+                        <h5 class="fw-bold text-primary"><i class="fa-solid fa-child me-2"></i>10. Sunday School</h5>
+                        <p class="text-secondary small mb-0">Providing foundational Christian education to children through engaging Bible stories and creative arts.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="important">
+        <div class="container text-center">
+            <h2 class="section-title">Why it's Important</h2>
+            <p class="text-secondary mb-5">Discover the 10 pillars of our growing church organization.</p>
+            <div class="row g-4">
+                
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-bible"></i>
+                        <h5 class="fw-bold text-dark">1. Biblical Truth</h5>
+                        <p class="text-secondary mb-0">We believe the Bible is the ultimate authority for our lives and ministry decisions.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-hands-holding-child"></i>
+                        <h5 class="fw-bold text-dark">2. Mentorship</h5>
+                        <p class="text-secondary mb-0">Equipping the next generation of leaders to carry the torch of faith effectively.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-earth-asia"></i>
+                        <h5 class="fw-bold text-dark">3. Outreach</h5>
+                        <p class="text-secondary mb-0">Sharing the Gospel and extending helping hands to the least, the last, and the lost.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-users"></i>
+                        <h5 class="fw-bold text-dark">4. True Community</h5>
+                        <p class="text-secondary mb-0">Finding a safe place where you are accepted, loved, and encouraged in your walk.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                        <h5 class="fw-bold text-dark">5. Empowered Prayer</h5>
+                        <p class="text-secondary mb-0">We believe in the power of corporate prayer to break chains and bring revival.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-arrow-up-right-dots"></i>
+                        <h5 class="fw-bold text-dark">6. Spiritual Growth</h5>
+                        <p class="text-secondary mb-0">Continuous discipleship training to help you fulfill God's purpose in your life.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-dove"></i>
+                        <h5 class="fw-bold text-dark">7. Holy Spirit Guidance</h5>
+                        <p class="text-secondary mb-0">Relying on the direction of the Holy Spirit in all organizational and personal breakthroughs.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        <h5 class="fw-bold text-dark">8. Integrity</h5>
+                        <p class="text-secondary mb-0">Promoting transparent leadership and moral standards in all of our church affairs.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-handshake"></i>
+                        <h5 class="fw-bold text-dark">9. Kingdom Unity</h5>
+                        <p class="text-secondary mb-0">Breaking denominational barriers to cooperate with broader Christian bodies for God's glory.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-gem"></i>
+                        <h5 class="fw-bold text-dark">10. Worship Excellence</h5>
+                        <p class="text-secondary mb-0">Giving God our utmost best in our presentation of music, arts, and ministry execution.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="vmg">
+        <div class="container text-center">
+            <h2 class="section-title">Vision, Mission & Goals</h2>
+            <div class="row g-4 mt-2 text-start">
+                <div class="col-md-4">
+                    <div class="vmg-card">
+                        <h4 class="text-info fw-bold mb-3"><i class="fa-solid fa-eye me-2"></i>Our Vision</h4>
+                        <p class="text-white-50">To be a Christ-centered community impacting Balilihan, Bohol, and the nations with the transforming love of God.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="vmg-card">
+                        <h4 class="text-info fw-bold mb-3"><i class="fa-solid fa-bullseye me-2"></i>Our Mission</h4>
+                        <p class="text-white-50">To make disciples, plant churches, and demonstrate God's kingdom through spiritual and social relevance in our municipality.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="vmg-card">
+                        <h4 class="text-info fw-bold mb-3"><i class="fa-solid fa-arrow-up-right-dots me-2"></i>Our Goals</h4>
+                        <p class="text-white-50">Train 100 church leaders annually, establish community care centers, and foster unity among Christian sectors in Balilihan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section updated for CHURCH purposes -->
+    <section id="contact">
+        <div class="container text-center">
+            <h2 class="section-title">Church Contact Information</h2>
+            <p class="text-secondary mb-5">Reach out to Mobilization Church Balilihan for prayers, fellowship, and inquiries.</p>
+            <div class="row g-4 justify-content-center">
+                
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-phone-alt"></i>
+                        <h5 class="fw-bold text-dark">Church Hotline</h5>
+                        <p class="text-secondary mb-0">+63 938 244 7968</p>
+                        <p class="text-secondary small">(Pastor's Office)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <h5 class="fw-bold text-dark">Church Address</h5>
+                        <p class="text-secondary mb-0">Sal-ing, Balilihan, Bohol 6342</p>
+                        <p class="text-secondary small">Philippines 6342</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <h5 class="fw-bold text-dark">Church Email</h5>
+                        <p class="text-secondary mb-0">mobilizationchurchb@gmail.com</p>
+                        <p class="text-secondary small">Official Church Correspondence</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Additional service schedule -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="bg-white p-4 rounded-3 shadow-sm">
+                        <h4 class="fw-bold text-primary"><i class="fa-regular fa-calendar-alt me-2"></i>Weekly Service Schedule</h4>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Sunday Worship</strong><br>9:00 AM - 12:00 nn</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Prayer Meeting</strong><br>Wednesday 6:00 PM</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="mb-1"><strong>Youth Fellowship</strong><br>Every 2nd week Sunday 1:30 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="policies">
+        <div class="container text-center">
+            <h2 class="section-title">Policies & Regulations</h2>
+            <div class="row text-start mt-3">
+                <div class="col-md-6 mb-4">
+                    <h5 class="fw-bold text-info"><i class="fa-solid fa-user-shield me-2"></i>Data Privacy & Protection</h5>
+                    <p class="text-white-50 small">We value your privacy. All registration details collected through the Mobilization Church system are stored in a secured environment solely utilized for church fellowship communications and membership records. We do not distribute or share your personal data with third-party organizations.</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5 class="fw-bold text-info"><i class="fa-solid fa-handshake-angle me-2"></i>Community Guidelines</h5>
+                    <p class="text-white-50 small">Members are expected to engage in mutual respect in line with Christian doctrines. Any form of harassment, malicious communication, or activities violating church by-laws reflected within church physical premises or digital threads strictly warrant appropriate pastoral counseling or organizational review.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER: Social media icons (FB, Instagram, TikTok, Email) replacing Survey Form -->
+    <footer>
+        <div class="container text-center">
+            <div class="social-icon-group">
+                <a href="#" class="footer-link" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="footer-link" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="footer-link" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="mailto:mobilizationchurch.balilihan@gmail.com" class="footer-link"><i class="fas fa-envelope"></i></a>
+            </div>
+
+            <p class="mb-1">&copy; 2026 Mobilization Church Balilihan. All Rights Reserved.</p>
+            <p class="text-secondary" style="font-size: 0.8rem;">“Go therefore and make disciples of all nations” — Matthew 28:19</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const menuToggle = document.getElementById('navbarNav');
+        const bsCollapse = new bootstrap.Collapse(menuToggle, {toggle:false});
+        navLinks.forEach((l) => {
+            l.addEventListener('click', () => { if(menuToggle.classList.contains('show')) { bsCollapse.hide(); } });
+        });
+    </script>
+</body>
+</html>
