@@ -2,339 +2,374 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobilization Church Balilihan - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCB Portal | Mobilization Church Balilihan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-            font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 20px;
         }
-
+        
         .login-container {
             max-width: 480px;
             width: 100%;
-            margin: 0 auto;
         }
-
-        .login-card {
+        
+        .church-card {
             background: rgba(255, 255, 255, 0.98);
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border-radius: 2rem;
             overflow: hidden;
-            transition: transform 0.2s ease;
-            border: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-
-        /* Cross Icon & Header */
-        .cross-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            padding: 35px 30px 30px 30px;
+        
+        .church-header {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            padding: 2rem 1.5rem;
             text-align: center;
-            border-bottom: 4px solid #38bdf8;
-        }
-
-        .cross-icon {
-            font-size: 4rem;
-            color: #38bdf8;
-            margin-bottom: 15px;
-            display: inline-block;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-        }
-
-        .cross-header h1 {
-            font-weight: 800;
-            font-size: 1.8rem;
             color: white;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
         }
-
-        .cross-header .subtitle {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 0;
+        
+        .church-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.8rem;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
         }
-
-        /* Form Body */
-        .form-body {
-            padding: 35px 30px 30px 30px;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-
-        .form-label {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
+        
+        .church-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .church-subtitle {
             font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            opacity: 0.85;
         }
-
-        .form-label i {
-            margin-right: 8px;
+        
+        .form-body {
+            padding: 2rem 1.8rem;
+        }
+        
+        /* Password field with eye icon inside */
+        .password-field {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+        
+        .password-field i.input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 1;
+        }
+        
+        .form-control-custom {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .form-control-custom:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Eye button inside the text field */
+        .eye-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            z-index: 2;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .eye-btn:hover {
             color: #3b82f6;
         }
-
-        .form-control {
-            border-radius: 14px;
-            padding: 0.85rem 1rem;
-            border: 1.5px solid #e2e8f0;
-            transition: all 0.2s;
-            background-color: #fefefe;
-            font-size: 0.95rem;
+        
+        /* Username field with icon */
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 1.2rem;
         }
-
-        .form-control:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
-            outline: none;
+        
+        .input-group-custom i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 1;
         }
-
-        /* Checkbox */
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        
         .form-check {
-            margin-bottom: 20px;
-        }
-
-        .form-check-input {
-            border-radius: 4px;
-            border: 1.5px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
         }
-
-        .form-check-input:checked {
-            background-color: #38bdf8;
-            border-color: #38bdf8;
+        
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
-
-        .form-check-label {
-            font-size: 0.85rem;
-            color: #475569;
-        }
-
-        /* Forgot password link */
+        
         .forgot-link {
-            font-size: 0.8rem;
             color: #3b82f6;
             text-decoration: none;
             font-weight: 500;
             cursor: pointer;
-            transition: color 0.2s;
         }
-
+        
         .forgot-link:hover {
-            color: #1e3a8a;
             text-decoration: underline;
         }
-
-        /* Login Button */
-        .btn-login {
-            background: linear-gradient(95deg, #0f172a, #1e3a8a);
+        
+        .login-btn {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 0.85rem;
+            border-radius: 1rem;
             font-weight: 700;
             font-size: 1rem;
-            border-radius: 40px;
             width: 100%;
             transition: all 0.3s;
-            color: white;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            cursor: pointer;
         }
-
-        .btn-login:hover {
+        
+        .login-btn:hover {
             transform: translateY(-2px);
-            background: linear-gradient(95deg, #1e293b, #2563eb);
-            box-shadow: 0 15px 25px -8px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-
-        /* Footer */
-        .footer-note {
+        
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .footer-notes {
+            padding: 1rem 1.8rem 1.5rem;
             text-align: center;
             border-top: 1px solid #e2e8f0;
-            padding: 20px 30px;
             background: #f8fafc;
         }
-
-        .footer-note p {
-            margin: 0;
-            font-size: 0.75rem;
+        
+        .footer-notes p {
+            font-size: 0.7rem;
             color: #64748b;
+            margin-bottom: 0.25rem;
         }
-
-        .footer-note i {
-            color: #f87171;
+        
+        .footer-notes i {
+            margin: 0 2px;
         }
-
-        /* Forgot Password Modal - Card Style */
-        .forgot-card {
-            background: white;
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
-        }
-
-        .forgot-card h6 {
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 15px;
-        }
-
-        .forgot-card .form-text {
-            font-size: 0.75rem;
-        }
-
-        /* Modal Override */
-        .modal-content {
-            border-radius: 28px;
-            border: none;
+        
+        .modal-content-custom {
+            border-radius: 1.5rem;
             overflow: hidden;
         }
-
-        .modal-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        
+        .password-credentials {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: #3b82f6;
             color: white;
-            border-bottom: none;
-            padding: 20px 25px;
-        }
-
-        .modal-header .btn-close {
-            filter: brightness(0) invert(1);
-        }
-
-        .modal-body {
-            padding: 25px;
-            background: #ffffff;
-        }
-
-        .btn-send-forgot {
-            background: #22c55e;
             border: none;
-            padding: 12px;
-            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+        
+        .alert-custom {
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            color: white;
-            width: 100%;
-            transition: all 0.2s;
         }
-
-        .btn-send-forgot:hover {
-            background: #16a34a;
-            transform: scale(1.01);
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            visibility: hidden;
-        }
-
-        .loading-spinner {
-            background: white;
-            padding: 30px 40px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .spinner-border {
-            width: 50px;
-            height: 50px;
+        
+        .role-member { background: #dbeafe; color: #1e40af; }
+        .role-music { background: #f3e8ff; color: #6b21a5; }
+        .role-program { background: #fed7aa; color: #9a3412; }
+        .role-pastor { background: #d1fae5; color: #065f46; }
+        .role-officer { background: #fee2e2; color: #991b1b; }
+        
+        @media (max-width: 480px) {
+            .form-body {
+                padding: 1.5rem;
+            }
+            .church-title {
+                font-size: 1.4rem;
+            }
+            .church-logo {
+                width: 60px;
+                height: 60px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="login-container">
-    <div class="login-card">
-        <!-- Cross Icon + Title / Subtitle -->
-        <div class="cross-header">
-            <div class="cross-icon">
-                <i class="fas fa-cross"></i>
-            </div>
-            <h1>Mobilization Church</h1>
-            <p class="subtitle">Balilihan · Born Again Community</p>
-            <p class="subtitle mt-2" style="font-size: 0.8rem;">Sign in to access your church portal</p>
+    <div class="church-card">
+        <div class="church-header">
+            <img src="mcb.jpg" alt="MCB Logo" class="church-logo" onerror="this.src='https://ui-avatars.com/api/?name=MCB&background=4f46e5&color=fff&size=80&bold=true'">
+            <h1 class="church-title">MCB Portal</h1>
+            <p class="church-subtitle">Mobilization Church Balilihan</p>
         </div>
-
-        <!-- Login Form -->
+        
         <div class="form-body">
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label class="form-label"><i class="fas fa-user"></i> Username / Email</label>
-                    <input type="text" class="form-control" id="loginUsername" placeholder="Enter your username or email" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="rememberCheckbox">
-                        <label class="form-check-label" for="rememberCheckbox">
-                            Remember me
-                        </label>
-                    </div>
-                    <a class="forgot-link" data-bs-toggle="modal" data-bs-target="#forgotModal">
-                        <i class="fas fa-question-circle me-1"></i> Forgot Password?
-                    </a>
-                </div>
-
-                <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt me-2"></i> Login
+            <div id="loginAlert" style="display: none;"></div>
+            
+            <!-- Username Field -->
+            <div class="input-group-custom">
+                <i class="fas fa-envelope"></i>
+                <input type="text" class="form-control-custom" id="loginIdentifier" placeholder="Username or Email" autocomplete="username">
+            </div>
+            
+            <!-- Password Field with Eye Icon Inside -->
+            <div class="password-field">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" class="form-control-custom" id="loginPassword" placeholder="Password" autocomplete="current-password" style="padding-right: 45px;">
+                <button type="button" class="eye-btn" onclick="togglePassword()">
+                    <i class="fas fa-eye-slash" id="toggleIcon"></i>
                 </button>
-            </form>
+            </div>
+            
+            <div class="form-options">
+                <label class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <span>Remember me</span>
+                </label>
+                <a class="forgot-link" onclick="showForgotModal()">Forgot password?</a>
+            </div>
+            
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
         </div>
-
-        <!-- Footer (No Register Link) -->
-        <div class="footer-note">
-            <p><i class="fas fa-heart"></i> Mobilization Church Balilihan · Faith & Service</p>
-            <p class="mt-1">© 2026 · Walking in Spirit and Truth</p>
+        
+        <div class="footer-notes">
+            <p><i class="fas fa-church"></i> Mobilization Church Balilihan • Born Again Christian Community</p>
+            <p><i class="fas fa-map-marker-alt"></i> Sal-ing, Balilihan, Bohol, Philippines</p>
+            <p><i class="fas fa-phone-alt"></i> +63 938 244 7968 | <i class="fas fa-envelope"></i> mobilizationchurchb@gmail.com</p>
         </div>
     </div>
 </div>
 
-<!-- Forgot Password Modal - Fill up email form + auto-generate message & send to mobilizationchurchb@gmail.com -->
-<div class="modal fade" id="forgotModal" tabindex="-1" aria-hidden="true">
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-key me-2"></i> Reset Password Request</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white;">
+                <h5 class="modal-title"><i class="fas fa-key me-2"></i>Recover Credentials</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                <div class="forgot-card">
-                    <p class="text-muted mb-3" style="font-size: 0.85rem;">Please enter your registered email address. We'll open a pre-filled message for the church admin to process your password reset.</p>
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="forgotEmail" placeholder="youremail@example.com" required>
-                        <div class="form-text">The church will receive your request and reply to this email.</div>
-                    </div>
+            <div class="modal-body" style="padding: 1.8rem;">
+                <p class="text-muted mb-3">Enter your registered information to recover your login credentials.</p>
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="forgotFullName" placeholder="Enter your full name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="forgotEmail" placeholder="Enter your registered email">
+                </div>
+                <div id="forgotAlert"></div>
+                <button class="login-btn mt-2" onclick="recoverCredentials()">
+                    <i class="fas fa-search me-2"></i> Find My Account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <button type="button" class="btn btn-send-forgot" onclick="sendForgotPasswordRequest()">
-                        <i class="fas fa-paper-plane me-2"></i> Send Request to Church
+<!-- Credentials Display Modal -->
+<div class="modal fade" id="credentialsModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+                <h5 class="modal-title"><i class="fas fa-user-check me-2"></i>Account Found</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.8rem;">
+                <p class="text-muted mb-3">Your login credentials are ready. Please copy and save them securely.</p>
+                <div class="password-credentials" id="credentialsDisplay"></div>
+                <div class="mt-3 d-flex gap-2">
+                    <button class="copy-btn flex-grow-1" onclick="copyCredentials()">
+                        <i class="fas fa-copy me-2"></i> Copy Credentials
+                    </button>
+                    <button class="copy-btn" style="background: #64748b;" onclick="closeCredentialsModal()">
+                        <i class="fas fa-check me-2"></i> Close
                     </button>
                 </div>
             </div>
@@ -342,214 +377,400 @@
     </div>
 </div>
 
-<!-- Loading Overlay -->
-<div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-spinner">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-3 mb-0">Authenticating...</p>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-    // Function to generate 2 professional paragraphs for password reset request
-    function generateForgotPasswordEmailBody(userEmail, userNameExtracted) {
-        const paragraph1 = `Dear Mobilization Church Admin,
-
-I am writing to request a password reset for my church portal account. I am unable to access my account, and I would greatly appreciate your assistance in recovering my login credentials. My registered email address is: ${userEmail}.
-
-Please let me know the next steps or send a password reset link to this email address. I need to regain access to stay connected with church updates, events, and mobilization activities here in Balilihan.`;
-        
-        const paragraph2 = `I kindly ask for your guidance on how to proceed with resetting my password. If additional verification is required, please inform me. I value my participation in Mobilization Church Balilihan and look forward to continuing my spiritual journey with the community.
-
-Thank you for your understanding and prompt response. May God bless your ministry and the entire church congregation.
-
-Respectfully,
-${userNameExtracted || "Church Member"}
-(Submitted via Forgot Password form)`;
-        
-        return `${paragraph1}\n\n${paragraph2}\n\n🙏 Grace and peace.`;
+    // ======================== SUPABASE CONFIG ========================
+    const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+    
+    let supabaseClient;
+    let credentialsData = null;
+    
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase initialized");
     }
     
-    // Function to send email via mailto (opens default email app / Gmail)
-    function sendForgotPasswordRequest() {
-        const emailInput = document.getElementById('forgotEmail').value.trim();
+    // Toggle password visibility with eye icon inside text field
+    function togglePassword() {
+        const passwordInput = document.getElementById('loginPassword');
+        const toggleIcon = document.getElementById('toggleIcon');
         
-        if (!emailInput) {
-            alert("⚠️ Please enter your email address to proceed with password reset.");
-            return;
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
         }
-        
-        const emailPattern = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-        if (!emailPattern.test(emailInput)) {
-            alert("❌ Please enter a valid email address (e.g., name@example.com).");
-            return;
-        }
-        
-        let userName = emailInput.split('@')[0];
-        userName = userName.replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        
-        const fullMessage = generateForgotPasswordEmailBody(emailInput, userName);
-        const churchEmail = "mobilizationchurchb@gmail.com";
-        const subject = `PASSWORD RESET REQUEST - ${userName} (${emailInput})`;
-        const mailtoLink = `mailto:${churchEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullMessage)}`;
-        
-        window.location.href = mailtoLink;
-        
-        const modalElement = document.getElementById('forgotModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        if (modalInstance) {
-            modalInstance.hide();
-        }
-        
-        alert("✅ Password reset request prepared!\n\n📧 Your email client will open with a pre-filled message.\n\n🔍 Review and click SEND.\n\nChurch admin will reply to your email.");
-        document.getElementById('forgotEmail').value = '';
     }
     
-    // LOGIN PROCESSING using login_process.js via dynamic script import
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    // Safe storage functions
+    function safeSetLocalStorage(key, value) {
+        try {
+            localStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                console.warn('Storage quota exceeded, clearing old data...');
+                clearOldStorageData();
+                try {
+                    localStorage.setItem(key, value);
+                    return true;
+                } catch (e2) {
+                    console.error('Still cannot save to localStorage:', e2);
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
+    
+    function safeSetSessionStorage(key, value) {
+        try {
+            sessionStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+                console.warn('Session storage quota exceeded');
+                return false;
+            }
+            return false;
+        }
+    }
+    
+    function safeGetLocalStorage(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            console.error('Error reading from localStorage:', e);
+            return null;
+        }
+    }
+    
+    function safeGetSessionStorage(key) {
+        try {
+            return sessionStorage.getItem(key);
+        } catch (e) {
+            console.error('Error reading from sessionStorage:', e);
+            return null;
+        }
+    }
+    
+    function clearOldStorageData() {
+        const keysToKeep = ['mcb_user_session'];
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && !keysToKeep.includes(key)) {
+                    localStorage.removeItem(key);
+                }
+            }
+        } catch (e) {
+            console.error('Error clearing storage:', e);
+        }
+    }
+    
+    function showAlert(message, type = 'danger') {
+        const alertDiv = document.getElementById('loginAlert');
+        alertDiv.innerHTML = `
+            <div class="alert alert-${type} alert-custom">
+                <i class="fas ${type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>
+                ${message}
+            </div>
+        `;
+        alertDiv.style.display = 'block';
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 4000);
+    }
+    
+    async function handleLogin() {
+        const identifier = document.getElementById('loginIdentifier').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
         
-        const username = document.getElementById('loginUsername').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-        
-        if (!username) {
-            alert("⚠️ Please enter your username or email.");
+        if (!identifier || !password) {
+            showAlert('Please enter your username/email and password.');
             return;
         }
-        if (!password) {
-            alert("⚠️ Please enter your password.");
-            return;
-        }
         
-        // Show loading overlay
-        const overlay = document.getElementById('loadingOverlay');
-        overlay.style.visibility = 'visible';
-        
-        // Store credentials for processing
-        const loginData = { username, password };
+        const loginBtn = document.getElementById('loginBtn');
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging in...';
         
         try {
-            // Dynamically load and execute login_process.js
-            // First, check if script already exists
-            const existingScript = document.querySelector('script[src="process/login_process.js"]');
-            if (existingScript) {
-                existingScript.remove();
+            const { data, error } = await supabaseClient
+                .from('church_users')
+                .select('id, full_name, email, role, username, password, profile_image')
+                .or(`username.eq.${identifier},email.eq.${identifier}`);
+            
+            if (error) {
+                console.error('Supabase error:', error);
+                showAlert('Database error. Please try again.');
+                resetLoginBtn();
+                return;
             }
             
-            // Create a global callback handler for the login result
-            window.handleLoginResult = function(success, role, redirectUrl, errorMessage) {
-                overlay.style.visibility = 'hidden';
-                if (success) {
-                    // Store user info
-                    sessionStorage.setItem('userRole', role);
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('username', username);
-                    alert(`✅ Welcome! Redirecting to ${role} dashboard...`);
-                    window.location.href = redirectUrl;
-                } else {
-                    alert(`❌ Login Failed\n\n${errorMessage || 'Invalid username or password. Please try again.'}`);
-                }
-                delete window.handleLoginResult;
+            if (!data || data.length === 0) {
+                showAlert('No account found with that username or email.');
+                resetLoginBtn();
+                return;
+            }
+            
+            const user = data[0];
+            
+            if (user.password !== password) {
+                showAlert('Incorrect password. Please try again.');
+                resetLoginBtn();
+                return;
+            }
+            
+            const sessionUser = {
+                id: user.id,
+                full_name: user.full_name,
+                email: user.email,
+                role: user.role,
+                username: user.username,
+                profile_image: user.profile_image,
+                timestamp: Date.now()
             };
             
-            // Load the login_process.js script
-            const script = document.createElement('script');
-            script.src = 'process/login_process.js?_t=' + Date.now(); // Cache bust
-            script.onload = function() {
-                // Script loaded, call the login function if available
-                if (typeof window.processChurchLogin === 'function') {
-                    window.processChurchLogin(username, password);
-                } else {
-                    // Fallback if the JS doesn't have the expected function
-                    console.warn("processChurchLogin not found, using demo fallback");
-                    demoLoginFallback(username, password);
-                }
-            };
-            script.onerror = function() {
-                overlay.style.visibility = 'hidden';
-                alert("❌ Error loading login processor.\n\nPlease ensure 'process/login_process.js' exists.\n\nUsing demo mode fallback.");
-                demoLoginFallback(username, password);
-            };
-            document.head.appendChild(script);
+            const sessionData = JSON.stringify(sessionUser);
+            let storageSuccess = false;
             
-        } catch (error) {
-            overlay.style.visibility = 'hidden';
-            console.error("Login error:", error);
-            alert("❌ An error occurred during login. Please try again.");
-        }
-    });
-    
-    // Demo fallback function (inline for testing when JS file missing)
-    function demoLoginFallback(username, password) {
-        // Demo credentials for testing
-        const lowerUsername = username.toLowerCase();
-        let role = null;
-        
-        // Check by email or username patterns
-        if (lowerUsername.includes('member') || password === 'member123' || lowerUsername === 'member') {
-            role = 'member';
-        } else if (lowerUsername.includes('music') || password === 'music123' || lowerUsername === 'music') {
-            role = 'music';
-        } else if (lowerUsername.includes('program') || password === 'program123' || lowerUsername === 'program') {
-            role = 'program';
-        } else if (lowerUsername.includes('pastor') || password === 'pastor123' || lowerUsername === 'pastor') {
-            role = 'pastor';
-        } else if (lowerUsername.includes('officer') || password === 'officer123' || lowerUsername === 'officer') {
-            role = 'officer';
-        } else if (password === 'demo123' || password === 'church123') {
-            role = 'member';
-        }
-        
-        if (role) {
-            sessionStorage.setItem('userRole', role);
-            sessionStorage.setItem('isLoggedIn', 'true');
-            sessionStorage.setItem('username', username);
-            alert(`✅ Demo Login Successful!\n\nWelcome ${username}\nRole: ${role}\nRedirecting to dashboard...`);
-            window.location.href = `${role}/index.html`;
-        } else {
-            document.getElementById('loadingOverlay').style.visibility = 'hidden';
-            alert(`❌ Demo Login Failed\n\nDemo Credentials:\n• Username: member / Password: member123\n• Username: music / Password: music123\n• Username: program / Password: program123\n• Username: pastor / Password: pastor123\n• Username: officer / Password: officer123`);
+            if (rememberMe) {
+                storageSuccess = safeSetLocalStorage('mcb_user_session', sessionData);
+            } else {
+                storageSuccess = safeSetSessionStorage('mcb_user_session', sessionData);
+            }
+            
+            if (!storageSuccess) {
+                console.warn('Storage failed, but proceeding with login');
+                showAlert('Login successful! (Session storage unavailable)', 'warning');
+            }
+            
+            console.log('User role found:', user.role);
+            
+            setTimeout(() => {
+                redirectBasedOnRole(user.role);
+            }, 100);
+            
+        } catch (err) {
+            console.error('Login error:', err);
+            showAlert('Network error. Please check your connection.');
+            resetLoginBtn();
         }
     }
     
-    // Remember me functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedUsername = localStorage.getItem('savedUsername');
-        const savedPassword = localStorage.getItem('savedPassword');
-        const rememberCheckbox = document.getElementById('rememberCheckbox');
+    function resetLoginBtn() {
+        const loginBtn = document.getElementById('loginBtn');
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
+    }
+    
+    function redirectBasedOnRole(role) {
+        const normalizedRole = (role || '').toLowerCase();
+        const redirectPath = `${normalizedRole}/index.html`;
+        console.log('Redirecting to:', redirectPath);
         
-        if (savedUsername && savedPassword) {
-            document.getElementById('loginUsername').value = savedUsername;
-            document.getElementById('loginPassword').value = savedPassword;
-            rememberCheckbox.checked = true;
+        try {
+            window.location.href = redirectPath;
+        } catch (navError) {
+            window.location.replace(redirectPath);
+        }
+    }
+    
+    function showForgotModal() {
+        document.getElementById('forgotFullName').value = '';
+        document.getElementById('forgotEmail').value = '';
+        document.getElementById('forgotAlert').innerHTML = '';
+        const modal = new bootstrap.Modal(document.getElementById('forgotModal'));
+        modal.show();
+    }
+    
+    async function recoverCredentials() {
+        const fullName = document.getElementById('forgotFullName').value.trim();
+        const email = document.getElementById('forgotEmail').value.trim();
+        const alertDiv = document.getElementById('forgotAlert');
+        
+        if (!fullName || !email) {
+            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">Please enter both full name and email.</div>';
+            return;
         }
         
-        // Save credentials when checkbox is checked and form submitted
-        const originalSubmitHandler = document.getElementById('loginForm').submit;
+        alertDiv.innerHTML = '<div class="alert alert-info alert-custom"><i class="fas fa-spinner fa-spin me-2"></i> Searching for account...</div>';
+        
+        try {
+            const { data, error } = await supabaseClient
+                .from('church_users')
+                .select('id, full_name, email, username, password, role')
+                .eq('full_name', fullName)
+                .eq('email', email)
+                .single();
+            
+            if (error || !data) {
+                alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">No account found with that name and email combination.</div>';
+                return;
+            }
+            
+            credentialsData = {
+                full_name: data.full_name,
+                username: data.username,
+                password: data.password,
+                email: data.email,
+                role: data.role
+            };
+            
+            const forgotModal = bootstrap.Modal.getInstance(document.getElementById('forgotModal'));
+            forgotModal.hide();
+            displayCredentialsModal();
+            
+        } catch (err) {
+            console.error(err);
+            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">Network error. Please try again.</div>';
+        }
+    }
+    
+    function getRoleBadgeClass(role) {
+        const classes = {
+            'member': 'role-member',
+            'music': 'role-music',
+            'program': 'role-program',
+            'pastor': 'role-pastor',
+            'officer': 'role-officer'
+        };
+        return classes[role] || 'role-member';
+    }
+    
+    function getRoleLabel(role) {
+        const labels = {
+            'member': 'Member',
+            'music': 'Music Ministry',
+            'program': 'Program Ministry',
+            'pastor': 'Pastor',
+            'officer': 'Church Officer'
+        };
+        return labels[role] || role;
+    }
+    
+    function displayCredentialsModal() {
+        if (!credentialsData) return;
+        
+        const roleClass = getRoleBadgeClass(credentialsData.role);
+        const roleLabel = getRoleLabel(credentialsData.role);
+        
+        const html = `
+            <div class="mb-2">
+                <strong><i class="fas fa-user"></i> Full Name:</strong> ${escapeHtml(credentialsData.full_name)}
+                <span class="role-badge ${roleClass} ms-2">${roleLabel}</span>
+            </div>
+            <div class="mb-2">
+                <strong><i class="fas fa-user-circle"></i> Username:</strong> ${escapeHtml(credentialsData.username)}
+            </div>
+            <div class="mb-2">
+                <strong><i class="fas fa-envelope"></i> Email:</strong> ${escapeHtml(credentialsData.email)}
+            </div>
+            <div class="mb-2">
+                <strong><i class="fas fa-lock"></i> Password:</strong> <span id="credPassword">${escapeHtml(credentialsData.password)}</span>
+            </div>
+            <div class="mt-2 text-muted small">
+                <i class="fas fa-info-circle"></i> Use these credentials to login to your account.
+            </div>
+        `;
+        
+        document.getElementById('credentialsDisplay').innerHTML = html;
+        
+        const modal = new bootstrap.Modal(document.getElementById('credentialsModal'));
+        modal.show();
+    }
+    
+    function copyCredentials() {
+        if (!credentialsData) return;
+        
+        const copyText = `MCB Account Credentials
+Full Name: ${credentialsData.full_name}
+Username: ${credentialsData.username}
+Email: ${credentialsData.email}
+Password: ${credentialsData.password}
+Role: ${getRoleLabel(credentialsData.role)}`;
+        
+        navigator.clipboard.writeText(copyText).then(() => {
+            const copyBtn = document.querySelector('#credentialsModal .copy-btn:first-child');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check me-2"></i> Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        }).catch(() => {
+            alert('Press Ctrl+C (or Cmd+C on Mac) to copy the credentials.');
+        });
+    }
+    
+    function closeCredentialsModal() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('credentialsModal'));
+        if (modal) modal.hide();
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function checkExistingSession() {
+        try {
+            let session = safeGetLocalStorage('mcb_user_session');
+            if (!session) {
+                session = safeGetSessionStorage('mcb_user_session');
+            }
+            
+            if (session) {
+                try {
+                    const user = JSON.parse(session);
+                    const isRecent = user.timestamp && (Date.now() - user.timestamp) < 86400000;
+                    if (user.role && isRecent) {
+                        console.log('Valid session found for role:', user.role);
+                        redirectBasedOnRole(user.role);
+                    } else if (user.role) {
+                        try {
+                            localStorage.removeItem('mcb_user_session');
+                            sessionStorage.removeItem('mcb_user_session');
+                        } catch(e) {}
+                    }
+                } catch(e) {
+                    console.error('Session parse error:', e);
+                }
+            }
+        } catch (err) {
+            console.error('Session check error:', err);
+        }
+    }
+    
+    document.getElementById('loginPassword')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') handleLogin();
+    });
+    document.getElementById('loginIdentifier')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') handleLogin();
     });
     
-    // Save remember me on successful login (will be called after validation)
-    window.saveRememberMe = function(username, password, remember) {
-        if (remember) {
-            localStorage.setItem('savedUsername', username);
-            localStorage.setItem('savedPassword', password);
-        } else {
-            localStorage.removeItem('savedUsername');
-            localStorage.removeItem('savedPassword');
-        }
-    };
+    setTimeout(checkExistingSession, 100);
+    
+    window.handleLogin = handleLogin;
+    window.showForgotModal = showForgotModal;
+    window.recoverCredentials = recoverCredentials;
+    window.copyCredentials = copyCredentials;
+    window.closeCredentialsModal = closeCredentialsModal;
+    window.togglePassword = togglePassword;
 </script>
 
-<!-- Instruction for developer to create login_process.js -->
-<script>
-    (function() {
-        console.log("%c🔐 Mobilization Church Login Page", "color: #38bdf8; font-size: 14px; font-weight: bold;");
-        console.log("%cUsing login process: process/login_process.js", "color: #22c55e;");
-        console.log("%cPlease create the file 'process/login_process.js' with the required authentication logic.", "color: #f59e0b;");
-    })();
-</script>
 </body>
 </html>
