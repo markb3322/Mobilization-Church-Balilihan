@@ -69,6 +69,60 @@
             transform: none;
         }
 
+        /* Filter Bar */
+        .filter-bar {
+            max-width: 1000px;
+            margin: 20px auto 0 auto;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-label {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .filter-select {
+            padding: 8px 15px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .filter-badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
         /* HD Container for Image Export */
         .export-container {
             width: 100%;
@@ -189,6 +243,14 @@
                 text-align: center;
                 margin-top: 10px;
             }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                margin: 10px auto;
+            }
+            .filter-group {
+                justify-content: space-between;
+            }
             .export-container { padding: 20px; margin: 10px; }
             .monthly-grid { grid-template-columns: 1fr; }
             .schedule-header h1 { font-size: 1.5rem; }
@@ -211,11 +273,56 @@
     </button>
 </div>
 
+<div class="filter-bar no-print">
+    <div class="filter-group">
+        <span class="filter-label"><i class="fas fa-filter"></i> Filter by:</span>
+        <select id="filterType" class="filter-select">
+            <option value="all">📅 All Programs</option>
+            <option value="month">📆 Select Month</option>
+            <option value="week">📊 Select Week</option>
+        </select>
+    </div>
+    
+    <div class="filter-group" id="monthSelectGroup" style="display: none;">
+        <span class="filter-label">Month:</span>
+        <select id="monthSelect" class="filter-select">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+    </div>
+    
+    <div class="filter-group" id="weekSelectGroup" style="display: none;">
+        <span class="filter-label">Week:</span>
+        <select id="weekSelect" class="filter-select">
+            <option value="1">Week 1 (Days 1-7)</option>
+            <option value="2">Week 2 (Days 8-14)</option>
+            <option value="3">Week 3 (Days 15-21)</option>
+            <option value="4">Week 4 (Days 22-28)</option>
+            <option value="5">Week 5 (Days 29-31)</option>
+        </select>
+    </div>
+    
+    <div class="filter-group">
+        <span class="filter-badge" id="filterBadge">Showing: All Programs</span>
+    </div>
+</div>
+
 <div id="captureArea" class="export-container">
     <div class="schedule-header">
         <img src="./image/mcb.jpg" width="80" alt="MCB Logo" class="mb-3" style="border-radius: 50%;" onerror="this.src='https://ui-avatars.com/api/?name=MCB&background=4f46e5&color=fff&size=80&bold=true'">
         <h1>Monthly Schedule</h1>
         <p>Mobilization Church Balilihan</p>
+        <div id="filterDisplay" class="mt-2" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;"></div>
     </div>
 
     <div id="programsContainer" class="monthly-grid">
@@ -245,7 +352,10 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserId = null;
     let currentUserFullName = null;
-    let programs = [];
+    let allPrograms = [];
+    let currentFilter = 'all';
+    let currentMonth = new Date().getMonth() + 1;
+    let currentWeek = 1;
     
     // Get current user from session
     async function getCurrentUser() {
@@ -256,11 +366,9 @@
                 currentUserId = user.id;
                 currentUserFullName = user.full_name || user.name || 'Church Member';
                 
-                // Update footer
                 document.getElementById('userName').innerText = currentUserFullName;
                 document.getElementById('userId').innerText = String(currentUserId).padStart(5, '0');
                 
-                // Fetch user data from Supabase for latest info
                 const { data } = await supabaseClient
                     .from('church_users')
                     .select('full_name')
@@ -278,7 +386,6 @@
             console.log("Error reading session:", e);
         }
         
-        // Not logged in
         document.getElementById('userName').innerText = 'Guest';
         document.getElementById('userId').innerText = '---';
         return false;
@@ -293,6 +400,15 @@
         }
     }
     
+    function formatShortDate(dateStr) {
+        if (!dateStr) return 'TBA';
+        try {
+            return new Date(dateStr).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+        } catch(e) {
+            return dateStr;
+        }
+    }
+    
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>]/g, function(m) {
@@ -301,6 +417,102 @@
             if (m === '>') return '&gt;';
             return m;
         });
+    }
+    
+    function getWeekOfMonth(date) {
+        const day = date.getDate();
+        if (day <= 7) return 1;
+        if (day <= 14) return 2;
+        if (day <= 21) return 3;
+        if (day <= 28) return 4;
+        return 5;
+    }
+    
+    function filterPrograms() {
+        const filterType = document.getElementById('filterType').value;
+        let filtered = [...allPrograms];
+        let filterText = '';
+        
+        if (filterType === 'month') {
+            const selectedMonth = parseInt(document.getElementById('monthSelect').value);
+            currentMonth = selectedMonth;
+            filtered = allPrograms.filter(p => {
+                if (!p.service_date) return false;
+                const date = new Date(p.service_date);
+                return date.getMonth() + 1 === selectedMonth;
+            });
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            filterText = `Month: ${monthNames[selectedMonth - 1]}`;
+            document.getElementById('filterBadge').innerHTML = `Showing: ${monthNames[selectedMonth - 1]}`;
+        } 
+        else if (filterType === 'week') {
+            const selectedWeek = parseInt(document.getElementById('weekSelect').value);
+            currentWeek = selectedWeek;
+            filtered = allPrograms.filter(p => {
+                if (!p.service_date) return false;
+                const date = new Date(p.service_date);
+                return getWeekOfMonth(date) === selectedWeek;
+            });
+            filterText = `Week ${selectedWeek} of Month`;
+            document.getElementById('filterBadge').innerHTML = `Showing: Week ${selectedWeek}`;
+        } 
+        else {
+            filterText = 'All Programs';
+            document.getElementById('filterBadge').innerHTML = 'Showing: All Programs';
+        }
+        
+        // Sort by date
+        filtered.sort((a, b) => new Date(a.service_date) - new Date(b.service_date));
+        
+        document.getElementById('filterDisplay').innerHTML = filterText ? `<i class="fas fa-calendar-alt me-1"></i> ${filterText}` : '';
+        
+        displayPrograms(filtered);
+    }
+    
+    function displayPrograms(programs) {
+        const container = document.getElementById('programsContainer');
+        
+        if (programs.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-calendar-day fa-3x mb-3"></i>
+                    <h5>No Programs Found</h5>
+                    <p>No Sunday programs available for the selected filter.</p>
+                    <a href="add_program.html" class="btn btn-primary mt-3">Add New Program</a>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        programs.forEach(program => {
+            const serviceDate = formatDate(program.service_date);
+            const shortDate = formatShortDate(program.service_date);
+            const mcName = program.mc_name || program.mc_name_auto || 'TBA';
+            const speaker = program.host_pastor_name || program.speaker || 'TBA';
+            
+            html += `
+                <div class="sunday-card">
+                    <div class="date-badge">
+                        <i class="far fa-calendar-alt me-2"></i>
+                        ${shortDate}
+                    </div>
+                    
+                    <div class="info-row">
+                        <span class="info-label">Master of Ceremony</span>
+                        <span class="info-value">${escapeHtml(mcName)}</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Host Pastor and Elders</span>
+                        <span class="info-value">${escapeHtml(speaker)}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
     }
     
     async function fetchPrograms() {
@@ -327,48 +539,8 @@
             
             if (error) throw error;
             
-            programs = data || [];
-            
-            if (programs.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open fa-3x mb-3"></i>
-                        <h5>No Programs Found</h5>
-                        <p>You haven't created any Sunday programs yet.</p>
-                        <a href="add_program.html" class="btn btn-primary mt-3">Add New Program</a>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            
-            programs.forEach(program => {
-                const serviceDate = formatDate(program.service_date);
-                const mcName = program.mc_name || program.mc_name_auto || 'TBA';
-                const speaker = program.host_pastor_name || program.speaker || 'TBA';
-                
-                html += `
-                    <div class="sunday-card">
-                        <div class="date-badge">
-                            <i class="far fa-calendar-alt me-2"></i>
-                            ${serviceDate}
-                        </div>
-                        
-                        <div class="info-row">
-                            <span class="info-label">Master of Ceremony</span>
-                            <span class="info-value">${escapeHtml(mcName)}</span>
-                        </div>
-
-                        <div class="info-row">
-                            <span class="info-label">Host Pastor and Elders</span>
-                            <span class="info-value">${escapeHtml(speaker)}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
+            allPrograms = data || [];
+            filterPrograms();
             
         } catch (err) {
             console.error('Fetch error:', err);
@@ -381,6 +553,40 @@
                 </div>
             `;
         }
+    }
+    
+    // Filter change handlers
+    function setupFilters() {
+        const filterType = document.getElementById('filterType');
+        const monthGroup = document.getElementById('monthSelectGroup');
+        const weekGroup = document.getElementById('weekSelectGroup');
+        const monthSelect = document.getElementById('monthSelect');
+        const weekSelect = document.getElementById('weekSelect');
+        
+        filterType.addEventListener('change', function() {
+            currentFilter = this.value;
+            
+            if (this.value === 'month') {
+                monthGroup.style.display = 'flex';
+                weekGroup.style.display = 'none';
+                filterPrograms();
+            } else if (this.value === 'week') {
+                monthGroup.style.display = 'none';
+                weekGroup.style.display = 'flex';
+                filterPrograms();
+            } else {
+                monthGroup.style.display = 'none';
+                weekGroup.style.display = 'none';
+                filterPrograms();
+            }
+        });
+        
+        monthSelect.addEventListener('change', filterPrograms);
+        weekSelect.addEventListener('change', filterPrograms);
+        
+        // Set current month as default
+        const currentMonthValue = new Date().getMonth() + 1;
+        monthSelect.value = currentMonthValue;
     }
     
     // Download HD Image
@@ -420,9 +626,9 @@
     // Initialize
     async function init() {
         await getCurrentUser();
+        setupFilters();
         await fetchPrograms();
         
-        // Add event listener for download button
         document.getElementById('downloadHD').addEventListener('click', downloadHDImage);
     }
     
@@ -430,4 +636,4 @@
 </script>
 
 </body>
-</html>
+    </html>
