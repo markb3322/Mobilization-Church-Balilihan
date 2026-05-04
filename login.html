@@ -25,7 +25,7 @@
         }
         
         .login-container {
-            max-width: 480px;
+            max-width: 520px;
             width: 100%;
         }
         
@@ -75,7 +75,6 @@
             padding: 2rem 1.8rem;
         }
         
-        /* Password field with eye icon inside */
         .password-field {
             position: relative;
             margin-bottom: 1.2rem;
@@ -106,7 +105,6 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* Eye button inside the text field */
         .eye-btn {
             position: absolute;
             right: 15px;
@@ -128,7 +126,6 @@
             color: #3b82f6;
         }
         
-        /* Username field with icon */
         .input-group-custom {
             position: relative;
             margin-bottom: 1.2rem;
@@ -147,8 +144,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.8rem;
             font-size: 0.85rem;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .form-check {
@@ -164,16 +163,290 @@
             cursor: pointer;
         }
         
+        .links-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
         .forgot-link {
             color: #3b82f6;
             text-decoration: none;
             font-weight: 500;
             cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
         
         .forgot-link:hover {
             text-decoration: underline;
+            color: #1d4ed8;
         }
+        
+        /* ==================== CAT VERIFICATION STYLES ==================== */
+        .cat-verification-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px dashed #f59e0b;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cat-verification-box.verified {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-color: #10b981;
+        }
+        
+        .cat-verification-box.failed {
+            animation: shake 0.5s ease-in-out;
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+        
+        .cat-question {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .cat-emoji {
+            font-size: 2rem;
+            animation: catBounce 0.6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes catBounce {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-5px) rotate(5deg); }
+        }
+        
+        .cat-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cat-option-btn {
+            background: white;
+            border: 2px solid #d1d5db;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 130px;
+            justify-content: center;
+        }
+        
+        .cat-option-btn:hover:not(:disabled) {
+            border-color: #f59e0b;
+            background: #fffbeb;
+            transform: scale(1.03);
+        }
+        
+        .cat-option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .cat-option-btn.correct-flash {
+            background: #10b981;
+            color: white;
+            border-color: #059669;
+            animation: pulse 0.4s ease-in-out;
+        }
+        
+        .cat-option-btn.wrong-flash {
+            background: #ef4444;
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .verification-status {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .verification-status.success { color: #065f46; }
+        .verification-status.error { color: #991b1b; }
+        .verification-status.waiting { color: #92400e; }
+        
+        .cat-help-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 0.6rem;
+            flex-wrap: wrap;
+        }
+        
+        .cat-help-link {
+            font-size: 0.7rem;
+            color: #92400e;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid #fbbf24;
+        }
+        
+        .cat-help-link:hover {
+            background: #fef3c7;
+            color: #d97706;
+            border-color: #f59e0b;
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+        
+        /* Privacy Modal Overlay */
+        .privacy-cat-overlay {
+            display: none;
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 0.8rem;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: slideDown 0.4s ease-out;
+            border: 2px solid #fbbf24;
+        }
+        
+        .privacy-cat-overlay.show {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); max-height: 0; }
+            to { opacity: 1; transform: translateY(0); max-height: 600px; }
+        }
+        
+        .privacy-cat-image {
+            width: 100%;
+            max-height: 180px;
+            object-fit: cover;
+            border-radius: 0.8rem;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .privacy-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .privacy-text {
+            font-size: 0.72rem;
+            color: #374151;
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+        }
+        
+        .privacy-close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .privacy-close-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+        
+        /* Help Us Modal */
+        .help-us-content {
+            padding: 0.5rem 0;
+        }
+        
+        .help-us-content h6 {
+            color: #1e3a8a;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .help-us-content p {
+            font-size: 0.8rem;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .help-us-content ol {
+            padding-left: 1.2rem;
+            font-size: 0.78rem;
+            color: #4b5563;
+        }
+        
+        .help-us-content ol li {
+            margin-bottom: 0.35rem;
+        }
+        
+        .question-counter {
+            font-size: 0.7rem;
+            color: #92400e;
+            margin-top: 0.3rem;
+            opacity: 0.8;
+        }
+        
+        .cat-paw-prints {
+            position: absolute;
+            opacity: 0.15;
+            font-size: 1.5rem;
+            pointer-events: none;
+        }
+        
+        .paw-1 { top: 5px; left: 10px; transform: rotate(-20deg); }
+        .paw-2 { bottom: 5px; right: 10px; transform: rotate(30deg); }
+        .paw-3 { top: 50%; right: 20px; transform: rotate(-10deg); }
+        
+        /* ==================== END CAT VERIFICATION STYLES ==================== */
         
         .login-btn {
             background: linear-gradient(135deg, #1e3a8a, #0f172a);
@@ -188,7 +461,7 @@
             cursor: pointer;
         }
         
-        .login-btn:hover {
+        .login-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
@@ -196,6 +469,8 @@
         .login-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .footer-notes {
@@ -211,9 +486,7 @@
             margin-bottom: 0.25rem;
         }
         
-        .footer-notes i {
-            margin: 0 2px;
-        }
+        .footer-notes i { margin: 0 2px; }
         
         .modal-content-custom {
             border-radius: 1.5rem;
@@ -237,6 +510,7 @@
             border-radius: 0.5rem;
             font-size: 0.8rem;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
         .copy-btn:hover {
@@ -263,17 +537,26 @@
         .role-pastor { background: #d1fae5; color: #065f46; }
         .role-officer { background: #fee2e2; color: #991b1b; }
         
+        .verification-required-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.15rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border: 1px solid #f59e0b;
+        }
+        
         @media (max-width: 480px) {
-            .form-body {
-                padding: 1.5rem;
-            }
-            .church-title {
-                font-size: 1.4rem;
-            }
-            .church-logo {
-                width: 60px;
-                height: 60px;
-            }
+            .form-body { padding: 1.5rem; }
+            .church-title { font-size: 1.4rem; }
+            .church-logo { width: 60px; height: 60px; }
+            .cat-option-btn { min-width: 110px; font-size: 0.8rem; }
+            .privacy-cat-image { max-height: 130px; }
+            .cat-help-links { gap: 8px; }
+            .cat-help-link { font-size: 0.65rem; padding: 0.15rem 0.4rem; }
+            .links-group { gap: 8px; }
         }
     </style>
 </head>
@@ -296,7 +579,7 @@
                 <input type="text" class="form-control-custom" id="loginIdentifier" placeholder="Username or Email" autocomplete="username">
             </div>
             
-            <!-- Password Field with Eye Icon Inside -->
+            <!-- Password Field -->
             <div class="password-field">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" class="form-control-custom" id="loginPassword" placeholder="Password" autocomplete="current-password" style="padding-right: 45px;">
@@ -305,23 +588,158 @@
                 </button>
             </div>
             
+            <!-- ==================== CAT VERIFICATION WITH PRIVACY & HELP ==================== -->
+            <div class="cat-verification-box" id="catVerificationBox">
+                <span class="cat-paw-prints paw-1">🐾</span>
+                <span class="cat-paw-prints paw-2">🐾</span>
+                <span class="cat-paw-prints paw-3">🐾</span>
+                
+                <div class="cat-question">
+                    <span class="cat-emoji" id="catEmoji">🐱</span>
+                    <span id="catQuestionText">Loading cat verification...</span>
+                </div>
+                
+                <div class="cat-options" id="catOptions">
+                    <!-- Options populated dynamically -->
+                </div>
+                
+                <div class="verification-status waiting" id="verificationStatus">
+                    <i class="fas fa-paw"></i> 
+                    <span id="statusText">Answer all 6 questions to verify...</span>
+                </div>
+                
+                <!-- Help Links Row -->
+                <div class="cat-help-links">
+                    <a class="cat-help-link" onclick="togglePrivacyCat()" title="View Privacy Notice & Cat Picture">
+                        <i class="fas fa-cat"></i> Show Cat 🐱
+                    </a>
+                    <a class="cat-help-link" onclick="showHelpUsModal()" title="Need help with verification?">
+                        <i class="fas fa-question-circle"></i> Help Us ❓
+                    </a>
+                </div>
+                
+                <!-- Privacy Act + Cat Picture Overlay -->
+                <div class="privacy-cat-overlay" id="privacyCatOverlay">
+                    <img src="https://cataas.com/cat?width=400&height=200" alt="Privacy Cat" class="privacy-cat-image" 
+                         onerror="this.src='https://placekitten.com/400/200'" id="privacyCatImg">
+                    
+                    <div class="privacy-title">
+                        <i class="fas fa-shield-alt"></i> Privacy Notice & Cat Verification
+                    </div>
+                    
+                    <p class="privacy-text">
+                        <strong>Paragraph 1 — Data Protection:</strong> This Human-Cat Verification system is designed 
+                        to protect your account from automated bots and unauthorized access. We do not collect, store, 
+                        or share any personal data through this verification process. Your responses to the cat-themed 
+                        questions are processed locally in your browser and are never transmitted to external servers. 
+                        The sole purpose of this verification is to ensure that a real human being — not a malicious 
+                        script or bot — is attempting to access the MCB Portal. Your privacy and security are our 
+                        top priorities, in accordance with the Data Privacy Act of 2012 (Republic Act No. 10173) 
+                        of the Philippines.
+                    </p>
+                    
+                    <p class="privacy-text">
+                        <strong>Paragraph 2 — Consent & Transparency:</strong> By completing this cat verification 
+                        challenge, you acknowledge that you are a human user and consent to this minimal interaction 
+                        designed solely for security purposes. No cookies, tracking pixels, or fingerprinting 
+                        technologies are employed in this verification step. The cat image displayed above is 
+                        randomly sourced and does not contain any tracking mechanisms. We believe in transparent 
+                        security practices — just like a cat who always lands on its feet, our verification process 
+                        is straightforward, harmless, and respectful of your digital rights. If you have concerns, 
+                        please contact our Data Protection Officer at mobilizationchurchb@gmail.com. Remember: 
+                        a cat may have nine lives, but your privacy deserves eternal protection. 🐱🔒
+                    </p>
+                    
+                    <button type="button" class="privacy-close-btn" onclick="togglePrivacyCat()">
+                        <i class="fas fa-times"></i> Close Privacy Notice
+                    </button>
+                </div>
+                
+                <div class="question-counter" id="questionCounter">
+                    Question: <span id="currentQ">1</span>/6 ✅ <span id="scoreCount">0</span>
+                </div>
+                
+                <!-- Hidden verification data -->
+                <input type="hidden" id="catVerified" value="false">
+                <input type="hidden" id="currentQuestionIndex" value="0">
+                <input type="hidden" id="correctAnswersCount" value="0">
+            </div>
+            <!-- ==================== END CAT VERIFICATION ==================== -->
+            
             <div class="form-options">
                 <label class="form-check">
                     <input type="checkbox" class="form-check-input" id="rememberMe">
                     <span>Remember me</span>
                 </label>
-                <a class="forgot-link" onclick="showForgotModal()">Forgot password?</a>
+                <div class="links-group">
+                    <a class="forgot-link" onclick="showForgotModal()">
+                        <i class="fas fa-key"></i> Forgot password?
+                    </a>
+                </div>
             </div>
             
             <button class="login-btn" id="loginBtn" onclick="handleLogin()">
                 <i class="fas fa-sign-in-alt me-2"></i> Login
             </button>
+            <div style="text-align:center; margin-top:0.5rem;">
+                <span class="verification-required-badge" id="loginStatusBadge">
+                    <i class="fas fa-lock"></i> Cat verification required
+                </span>
+            </div>
         </div>
         
         <div class="footer-notes">
             <p><i class="fas fa-church"></i> Mobilization Church Balilihan • Born Again Christian Community</p>
             <p><i class="fas fa-map-marker-alt"></i> Sal-ing, Balilihan, Bohol, Philippines</p>
             <p><i class="fas fa-phone-alt"></i> +63 938 244 7968 | <i class="fas fa-envelope"></i> mobilizationchurchb@gmail.com</p>
+        </div>
+    </div>
+</div>
+
+<!-- Help Us Modal -->
+<div class="modal fade" id="helpUsModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+                <h5 class="modal-title"><i class="fas fa-question-circle me-2"></i>Help Us — Cat Verification Guide</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body help-us-content" style="padding: 1.8rem;">
+                <h6>🐱 How to Pass the Human-Cat Verification:</h6>
+                
+                <p><strong>Why do I need to do this?</strong><br>
+                This verification proves you're a real human and not a malicious bot trying to hack into our church portal. 
+                Bots can't understand cat trivia — but you can! 😸</p>
+                
+                <p><strong>📋 The Rules:</strong></p>
+                <ol>
+                    <li><strong>Answer all 6 cat-themed questions</strong> — Each question has 2 choices.</li>
+                    <li><strong>Score at least 4/6 correct</strong> — You need 4 or more correct answers to pass.</li>
+                    <li><strong>If you fail (below 4/6):</strong> The quiz will restart automatically. Don't worry, the questions are shuffled!</li>
+                    <li><strong>Once passed:</strong> The box turns green ✅ and you can proceed to login.</li>
+                    <li><strong>Cannot login without passing:</strong> The login button will remain locked until verification is complete.</li>
+                </ol>
+                
+                <p><strong>💡 Tips:</strong></p>
+                <ul style="font-size:0.78rem; color:#4b5563; padding-left:1.2rem;">
+                    <li>Cats purr, meow, and sleep 12-16 hours</li>
+                    <li>Cats love boxes, yarn, and chasing mice</li>
+                    <li>Cats have 9 lives (according to legend!)</li>
+                    <li>Read each question carefully — the answers are cat-logical! 🐾</li>
+                </ul>
+                
+                <p><strong>🔒 Privacy Note:</strong> No personal data is collected during verification. 
+                View our full privacy notice by clicking "Show Cat" in the verification box.</p>
+                
+                <p style="text-align:center; margin-top:1rem;">
+                    <span style="font-size:2rem;">🐱😻🐾</span><br>
+                    <small class="text-muted">Thank you for helping us keep MCB Portal secure!</small>
+                </p>
+                
+                <button class="login-btn mt-2" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <i class="fas fa-paw me-2"></i> Got it! Back to Verification
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -335,19 +753,24 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" style="padding: 1.8rem;">
-                <p class="text-muted mb-3">Enter your registered information to recover your login credentials.</p>
+                <p class="text-muted mb-3">Enter your registered full name and email to recover your credentials.</p>
                 <div class="mb-3">
-                    <label class="form-label">Full Name</label>
+                    <label class="form-label"><i class="fas fa-user me-1"></i> Full Name</label>
                     <input type="text" class="form-control" id="forgotFullName" placeholder="Enter your full name">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Email Address</label>
+                    <label class="form-label"><i class="fas fa-envelope me-1"></i> Email Address</label>
                     <input type="email" class="form-control" id="forgotEmail" placeholder="Enter your registered email">
                 </div>
                 <div id="forgotAlert"></div>
                 <button class="login-btn mt-2" onclick="recoverCredentials()">
                     <i class="fas fa-search me-2"></i> Find My Account
                 </button>
+                <p class="text-muted mt-3 mb-0" style="font-size:0.75rem; text-align:center;">
+                    <i class="fas fa-info-circle me-1"></i> 
+                    If you cannot recover your password, please contact our admin at 
+                    <strong>mobilizationchurchb@gmail.com</strong>
+                </p>
             </div>
         </div>
     </div>
@@ -393,7 +816,332 @@
         console.log("✅ Supabase initialized");
     }
     
-    // Toggle password visibility with eye icon inside text field
+    // ==================== PRIVACY CAT TOGGLE ====================
+    function togglePrivacyCat() {
+        const overlay = document.getElementById('privacyCatOverlay');
+        if (overlay.classList.contains('show')) {
+            overlay.classList.remove('show');
+        } else {
+            overlay.classList.add('show');
+            refreshCatImage();
+        }
+    }
+    
+    function refreshCatImage() {
+        const catImg = document.getElementById('privacyCatImg');
+        const randomCat = Math.floor(Math.random() * 1000);
+        catImg.src = `https://cataas.com/cat?width=400&height=200&random=${randomCat}`;
+        catImg.onerror = function() {
+            this.src = `https://placekitten.com/400/200?random=${randomCat}`;
+            this.onerror = null;
+        };
+    }
+    
+    // ==================== HELP US MODAL ====================
+    function showHelpUsModal() {
+        const modal = new bootstrap.Modal(document.getElementById('helpUsModal'));
+        modal.show();
+    }
+    
+    // ==================== UPDATE LOGIN STATUS BADGE ====================
+    function updateLoginStatusBadge() {
+        const badge = document.getElementById('loginStatusBadge');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        if (catVerificationPassed) {
+            badge.innerHTML = '<i class="fas fa-check-circle"></i> Verified — You can login now';
+            badge.style.background = '#d1fae5';
+            badge.style.color = '#065f46';
+            badge.style.borderColor = '#10b981';
+            loginBtn.disabled = false;
+        } else {
+            badge.innerHTML = '<i class="fas fa-lock"></i> Cat verification required';
+            badge.style.background = '#fef3c7';
+            badge.style.color = '#92400e';
+            badge.style.borderColor = '#f59e0b';
+            loginBtn.disabled = true;
+        }
+    }
+    
+    // ==================== 6-QUESTION CAT VERIFICATION LOGIC ====================
+    
+    const allCatQuestions = [
+        {
+            id: 1,
+            question: "🐱 Question 1: What sound does a happy cat make?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "🐕 Woof! Bark!", icon: "fa-dog" },
+                { value: "cat", label: "😸 Purrr... Meow!", icon: "fa-cat" }
+            ],
+            catEmoji: "😸",
+            successMessage: "Purrfect! Cats purr when happy! 🐾",
+            failMessage: "Woof? That's a dog! Cats say meow! 🐶"
+        },
+        {
+            id: 2,
+            question: "🐭 Question 2: Cats love to chase what?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "📧 Emails & PDFs", icon: "fa-file" },
+                { value: "cat", label: "🐁 Mice & Toys", icon: "fa-cat" }
+            ],
+            catEmoji: "🐱",
+            successMessage: "Yes! Mice are the ultimate prey! 🐭",
+            failMessage: "Emails? Cats can't read! Try again! 😹"
+        },
+        {
+            id: 3,
+            question: "🧶 Question 3: What do cats love to play with?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "💻 Laptop Keyboard", icon: "fa-laptop" },
+                { value: "cat", label: "🧶 Ball of Yarn", icon: "fa-cat" }
+            ],
+            catEmoji: "😽",
+            successMessage: "Classic! Cats go crazy for yarn! 🧶",
+            failMessage: "Keyboard? Well... cats DO sit on them, but yarn is the classic! 😂"
+        },
+        {
+            id: 4,
+            question: "📦 Question 4: A cat's favorite place to sit?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "🪑 Expensive Chair", icon: "fa-chair" },
+                { value: "cat", label: "📦 Simple Box", icon: "fa-box" }
+            ],
+            catEmoji: "📦",
+            successMessage: "If it fits, it sits! Box is king! 👑",
+            failMessage: "Chair? No way! Box is the only answer! 📦"
+        },
+        {
+            id: 5,
+            question: "😴 Question 5: How many hours do cats sleep per day?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "🕐 8 Hours", icon: "fa-clock" },
+                { value: "cat", label: "😴 12-16 Hours", icon: "fa-bed" }
+            ],
+            catEmoji: "😴",
+            successMessage: "Yes! Cats are professional sleepers! 💤",
+            failMessage: "8 hours? That's for humans! Cats sleep 12-16 hours! 😴"
+        },
+        {
+            id: 6,
+            question: "❤️ Question 6: Cats are known for having how many lives?",
+            correctAnswer: "cat",
+            options: [
+                { value: "human", label: "❤️ 1 Life", icon: "fa-heart" },
+                { value: "cat", label: "😼 9 Lives!", icon: "fa-heart" }
+            ],
+            catEmoji: "😼",
+            successMessage: "Nine lives! Cats are magical creatures! ✨",
+            failMessage: "One life? That's for humans! Cats have 9! 😉"
+        }
+    ];
+    
+    let shuffledQuestions = [];
+    let currentQuestionIndex = 0;
+    let correctAnswersCount = 0;
+    let catVerificationPassed = false;
+    let isAnswerInProgress = false;
+    
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+    
+    function initCatVerification() {
+        shuffledQuestions = shuffleArray(allCatQuestions);
+        currentQuestionIndex = 0;
+        correctAnswersCount = 0;
+        catVerificationPassed = false;
+        isAnswerInProgress = false;
+        
+        document.getElementById('catVerified').value = 'false';
+        document.getElementById('currentQuestionIndex').value = '0';
+        document.getElementById('correctAnswersCount').value = '0';
+        
+        document.getElementById('verificationStatus').className = 'verification-status waiting';
+        document.getElementById('statusText').textContent = 'Answer all 6 questions to verify...';
+        document.getElementById('catVerificationBox').classList.remove('verified', 'failed');
+        document.getElementById('scoreCount').textContent = '0';
+        document.getElementById('currentQ').textContent = '1';
+        
+        // Lock login button
+        updateLoginStatusBadge();
+        
+        loadQuestion(0);
+        
+        console.log('🐱 6-Question Cat Verification initialized! Questions shuffled:', 
+            shuffledQuestions.map(q => q.id).join(', '));
+    }
+    
+    function loadQuestion(index) {
+        if (index >= shuffledQuestions.length) {
+            completeVerification();
+            return;
+        }
+        
+        currentQuestionIndex = index;
+        const question = shuffledQuestions[index];
+        
+        document.getElementById('catQuestionText').textContent = question.question;
+        document.getElementById('catEmoji').textContent = question.catEmoji;
+        
+        if (!catVerificationPassed) {
+            const optionsContainer = document.getElementById('catOptions');
+            let optionsHTML = '';
+            question.options.forEach((option) => {
+                const iconHTML = option.icon ? `<i class="fas ${option.icon}"></i>` : '';
+                optionsHTML += `
+                    <button type="button" class="cat-option-btn" onclick="handleCatAnswer('${option.value}', ${index})">
+                        ${iconHTML} ${option.label}
+                    </button>
+                `;
+            });
+            optionsContainer.innerHTML = optionsHTML;
+        }
+        
+        document.getElementById('currentQ').textContent = index + 1;
+        document.getElementById('verificationStatus').className = 'verification-status waiting';
+        document.getElementById('statusText').textContent = `Question ${index + 1} of 6 — Choose wisely! 🤔`;
+        
+        isAnswerInProgress = false;
+        
+        console.log(`📝 Question ${index + 1}/6 loaded:`, question.question);
+    }
+    
+    function handleCatAnswer(selectedAnswer, questionIndex) {
+        if (catVerificationPassed) return;
+        if (isAnswerInProgress) return;
+        
+        isAnswerInProgress = true;
+        
+        const question = shuffledQuestions[questionIndex];
+        const correctAnswer = question.correctAnswer;
+        const isCorrect = (selectedAnswer === correctAnswer);
+        
+        const optionButtons = document.querySelectorAll('.cat-option-btn');
+        
+        if (isCorrect) {
+            correctAnswersCount++;
+            document.getElementById('correctAnswersCount').value = correctAnswersCount;
+            document.getElementById('scoreCount').textContent = correctAnswersCount;
+            
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.7';
+                
+                const btnText = btn.textContent.trim();
+                if ((selectedAnswer === 'cat' && (btnText.includes('😸') || btnText.includes('🐁') || 
+                     btnText.includes('🧶') || btnText.includes('📦') || 
+                     btnText.includes('😴') || btnText.includes('😼'))) ||
+                    (selectedAnswer === 'human' && (btnText.includes('🐕') || btnText.includes('📧') || 
+                     btnText.includes('💻') || btnText.includes('🪑') || 
+                     btnText.includes('🕐') || btnText.includes('❤️')))) {
+                    btn.classList.add('correct-flash');
+                }
+            });
+            
+            document.getElementById('verificationStatus').className = 'verification-status success';
+            document.getElementById('statusText').innerHTML = `✅ ${question.successMessage}`;
+            document.getElementById('catEmoji').textContent = '😻';
+            
+            console.log(`✅ Question ${questionIndex + 1} CORRECT! (${correctAnswersCount}/6)`);
+            
+        } else {
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '0.7';
+                
+                const btnText = btn.textContent.trim();
+                if ((selectedAnswer === 'human' && (btnText.includes('🐕') || btnText.includes('📧') || 
+                     btnText.includes('💻') || btnText.includes('🪑') || 
+                     btnText.includes('🕐') || btnText.includes('❤️'))) ||
+                    (selectedAnswer === 'cat' && (btnText.includes('😸') || btnText.includes('🐁') || 
+                     btnText.includes('🧶') || btnText.includes('📦') || 
+                     btnText.includes('😴') || btnText.includes('😼')))) {
+                    btn.classList.add('wrong-flash');
+                }
+            });
+            
+            document.getElementById('verificationStatus').className = 'verification-status error';
+            document.getElementById('statusText').innerHTML = `❌ ${question.failMessage}`;
+            document.getElementById('catEmoji').textContent = '😿';
+            
+            document.getElementById('catVerificationBox').classList.add('failed');
+            
+            console.log(`❌ Question ${questionIndex + 1} WRONG! (${correctAnswersCount}/6)`);
+        }
+        
+        setTimeout(() => {
+            document.getElementById('catVerificationBox').classList.remove('failed');
+            const nextIndex = currentQuestionIndex + 1;
+            loadQuestion(nextIndex);
+        }, 1800);
+    }
+    
+    function completeVerification() {
+        const passed = correctAnswersCount >= 4;
+        
+        if (passed) {
+            catVerificationPassed = true;
+            document.getElementById('catVerified').value = 'true';
+            
+            document.getElementById('catEmoji').textContent = '😻';
+            document.getElementById('catQuestionText').textContent = '✅ Verification Complete!';
+            document.getElementById('verificationStatus').className = 'verification-status success';
+            document.getElementById('statusText').innerHTML = 
+                `🎉 You scored ${correctAnswersCount}/6! You're verified as Human! ✅`;
+            document.getElementById('catVerificationBox').classList.add('verified');
+            
+            document.getElementById('catOptions').innerHTML = `
+                <div style="text-align:center; color:#065f46; font-weight:700; font-size:0.9rem;">
+                    🐱✅ Human Verified! Score: ${correctAnswersCount}/6
+                </div>
+            `;
+            
+            document.getElementById('questionCounter').innerHTML = 
+                `✅ Complete! Score: <strong>${correctAnswersCount}/6</strong>`;
+            
+            // UNLOCK LOGIN
+            updateLoginStatusBadge();
+            
+            console.log(`🎉 VERIFICATION PASSED! Score: ${correctAnswersCount}/6 — Login unlocked!`);
+            
+        } else {
+            document.getElementById('catEmoji').textContent = '😿';
+            document.getElementById('catQuestionText').textContent = '❌ Verification Failed!';
+            document.getElementById('verificationStatus').className = 'verification-status error';
+            document.getElementById('statusText').innerHTML = 
+                `😿 You scored ${correctAnswersCount}/6. Need at least 4/6 to pass. Retrying...`;
+            document.getElementById('catVerificationBox').classList.add('failed');
+            
+            // Keep login locked
+            updateLoginStatusBadge();
+            
+            console.log(`❌ VERIFICATION FAILED! Score: ${correctAnswersCount}/6. Restarting...`);
+            
+            setTimeout(() => {
+                initCatVerification();
+            }, 2500);
+        }
+    }
+    
+    // Initialize on page load
+    initCatVerification();
+    // Initially disable login button
+    document.getElementById('loginBtn').disabled = true;
+    
+    // ==================== END CAT VERIFICATION LOGIC ====================
+    
     function togglePassword() {
         const passwordInput = document.getElementById('loginPassword');
         const toggleIcon = document.getElementById('toggleIcon');
@@ -409,7 +1157,6 @@
         }
     }
     
-    // Safe storage functions
     function safeSetLocalStorage(key, value) {
         try {
             localStorage.setItem(key, value);
@@ -486,13 +1233,37 @@
         alertDiv.style.display = 'block';
         setTimeout(() => {
             alertDiv.style.display = 'none';
-        }, 4000);
+        }, 5000);
     }
     
+    // ==================== STRICT LOGIN — REQUIRES CAT VERIFICATION ====================
     async function handleLogin() {
         const identifier = document.getElementById('loginIdentifier').value.trim();
         const password = document.getElementById('loginPassword').value;
         const rememberMe = document.getElementById('rememberMe').checked;
+        
+        // STRICT CHECK: Cannot proceed without cat verification
+        if (!catVerificationPassed) {
+            showAlert('🐱 <strong>Access Denied!</strong> Please complete the Human-Cat Verification first. The login button will unlock once verified.', 'warning');
+            
+            // Shake the verification box to draw attention
+            const verificationBox = document.getElementById('catVerificationBox');
+            verificationBox.classList.add('failed');
+            document.getElementById('catEmoji').textContent = '😾';
+            document.getElementById('statusText').textContent = '⚠️ Complete the cat quiz before logging in!';
+            
+            // Scroll to verification box
+            verificationBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                verificationBox.classList.remove('failed');
+                if (!catVerificationPassed && currentQuestionIndex < 6) {
+                    document.getElementById('catEmoji').textContent = shuffledQuestions[currentQuestionIndex]?.catEmoji || '🐱';
+                    document.getElementById('statusText').textContent = `Question ${currentQuestionIndex + 1} of 6 — Choose wisely! 🤔`;
+                }
+            }, 2000);
+            return;
+        }
         
         if (!identifier || !password) {
             showAlert('Please enter your username/email and password.');
@@ -512,13 +1283,15 @@
             if (error) {
                 console.error('Supabase error:', error);
                 showAlert('Database error. Please try again.');
-                resetLoginBtn();
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
                 return;
             }
             
             if (!data || data.length === 0) {
                 showAlert('No account found with that username or email.');
-                resetLoginBtn();
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
                 return;
             }
             
@@ -526,7 +1299,8 @@
             
             if (user.password !== password) {
                 showAlert('Incorrect password. Please try again.');
-                resetLoginBtn();
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
                 return;
             }
             
@@ -541,17 +1315,11 @@
             };
             
             const sessionData = JSON.stringify(sessionUser);
-            let storageSuccess = false;
             
             if (rememberMe) {
-                storageSuccess = safeSetLocalStorage('mcb_user_session', sessionData);
+                safeSetLocalStorage('mcb_user_session', sessionData);
             } else {
-                storageSuccess = safeSetSessionStorage('mcb_user_session', sessionData);
-            }
-            
-            if (!storageSuccess) {
-                console.warn('Storage failed, but proceeding with login');
-                showAlert('Login successful! (Session storage unavailable)', 'warning');
+                safeSetSessionStorage('mcb_user_session', sessionData);
             }
             
             console.log('User role found:', user.role);
@@ -563,14 +1331,9 @@
         } catch (err) {
             console.error('Login error:', err);
             showAlert('Network error. Please check your connection.');
-            resetLoginBtn();
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
         }
-    }
-    
-    function resetLoginBtn() {
-        const loginBtn = document.getElementById('loginBtn');
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i> Login';
     }
     
     function redirectBasedOnRole(role) {
@@ -585,6 +1348,7 @@
         }
     }
     
+    // ==================== FORGOT PASSWORD ====================
     function showForgotModal() {
         document.getElementById('forgotFullName').value = '';
         document.getElementById('forgotEmail').value = '';
@@ -599,11 +1363,11 @@
         const alertDiv = document.getElementById('forgotAlert');
         
         if (!fullName || !email) {
-            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">Please enter both full name and email.</div>';
+            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom"><i class="fas fa-exclamation-triangle me-2"></i>Please enter both full name and email.</div>';
             return;
         }
         
-        alertDiv.innerHTML = '<div class="alert alert-info alert-custom"><i class="fas fa-spinner fa-spin me-2"></i> Searching for account...</div>';
+        alertDiv.innerHTML = '<div class="alert alert-info alert-custom"><i class="fas fa-spinner fa-spin me-2"></i> Searching for your account...</div>';
         
         try {
             const { data, error } = await supabaseClient
@@ -614,7 +1378,7 @@
                 .single();
             
             if (error || !data) {
-                alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">No account found with that name and email combination.</div>';
+                alertDiv.innerHTML = '<div class="alert alert-danger alert-custom"><i class="fas fa-times-circle me-2"></i>No account found with that name and email combination. Please check your details or contact the church office.</div>';
                 return;
             }
             
@@ -628,11 +1392,14 @@
             
             const forgotModal = bootstrap.Modal.getInstance(document.getElementById('forgotModal'));
             forgotModal.hide();
-            displayCredentialsModal();
+            
+            setTimeout(() => {
+                displayCredentialsModal();
+            }, 300);
             
         } catch (err) {
             console.error(err);
-            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom">Network error. Please try again.</div>';
+            alertDiv.innerHTML = '<div class="alert alert-danger alert-custom"><i class="fas fa-wifi me-2"></i>Network error. Please try again.</div>';
         }
     }
     
@@ -666,20 +1433,20 @@
         
         const html = `
             <div class="mb-2">
-                <strong><i class="fas fa-user"></i> Full Name:</strong> ${escapeHtml(credentialsData.full_name)}
+                <strong><i class="fas fa-user me-1"></i> Full Name:</strong> ${escapeHtml(credentialsData.full_name)}
                 <span class="role-badge ${roleClass} ms-2">${roleLabel}</span>
             </div>
             <div class="mb-2">
-                <strong><i class="fas fa-user-circle"></i> Username:</strong> ${escapeHtml(credentialsData.username)}
+                <strong><i class="fas fa-user-circle me-1"></i> Username:</strong> ${escapeHtml(credentialsData.username)}
             </div>
             <div class="mb-2">
-                <strong><i class="fas fa-envelope"></i> Email:</strong> ${escapeHtml(credentialsData.email)}
+                <strong><i class="fas fa-envelope me-1"></i> Email:</strong> ${escapeHtml(credentialsData.email)}
             </div>
             <div class="mb-2">
-                <strong><i class="fas fa-lock"></i> Password:</strong> <span id="credPassword">${escapeHtml(credentialsData.password)}</span>
+                <strong><i class="fas fa-lock me-1"></i> Password:</strong> <span id="credPassword">${escapeHtml(credentialsData.password)}</span>
             </div>
             <div class="mt-2 text-muted small">
-                <i class="fas fa-info-circle"></i> Use these credentials to login to your account.
+                <i class="fas fa-info-circle me-1"></i> Use these credentials to login. You still need to pass cat verification.
             </div>
         `;
         
@@ -764,12 +1531,17 @@ Role: ${getRoleLabel(credentialsData.role)}`;
     
     setTimeout(checkExistingSession, 100);
     
+    // Expose functions globally
     window.handleLogin = handleLogin;
     window.showForgotModal = showForgotModal;
     window.recoverCredentials = recoverCredentials;
     window.copyCredentials = copyCredentials;
     window.closeCredentialsModal = closeCredentialsModal;
     window.togglePassword = togglePassword;
+    window.handleCatAnswer = handleCatAnswer;
+    window.initCatVerification = initCatVerification;
+    window.togglePrivacyCat = togglePrivacyCat;
+    window.showHelpUsModal = showHelpUsModal;
 </script>
 
 </body>
