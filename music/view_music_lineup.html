@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>View Music Lineup | Music Ministry | MCB Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            font-family: 'Inter', system-ui, sans-serif;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+        
+        .view-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        /* Toolbar */
+        .toolbar {
+            background: white;
+            border-radius: 28px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #9d174d;
+        }
+        
+        .tool-select, .tool-input {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.85rem;
+            background: white;
+        }
+        
+        .btn-tool {
+            background: linear-gradient(135deg, #9d174d, #db2777);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-tool:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(157,23,77,0.3);
+        }
+        
+        /* Bond Paper Wrapper with Horizontal Scroll */
+        .bond-paper-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+        
+        .bond-paper {
+            background: white;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        /* Ensure bond paper has minimum width for small devices */
+        @media (max-width: 768px) {
+            .bond-paper {
+                min-width: 320px;
+                width: 100%;
+            }
+        }
+        
+        .bond-paper.a4 {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+        }
+        
+        .bond-paper.short {
+            width: 8.5in;
+            min-height: 11in;
+            padding: 0.7in;
+        }
+        
+        .bond-paper.long {
+            width: 8.5in;
+            min-height: 13in;
+            padding: 0.7in;
+        }
+        
+        /* Content Styles */
+        .lineup-content {
+            width: 100%;
+            height: 100%;
+            font-family: inherit;
+        }
+        
+        .header-center {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #fce7f3;
+            padding-bottom: 1rem;
+        }
+        
+        .church-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 0.5rem;
+        }
+        
+        .church-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #9d174d;
+        }
+        
+        .church-address {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .title-center {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9d174d, #db2777);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0.8rem 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-card {
+            background: #fdf2f8;
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+        }
+        
+        .info-label {
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #9d174d;
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        
+        .band-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.3rem;
+        }
+        
+        .band-tag {
+            background: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            border: 1px solid #fce7f3;
+        }
+        
+        .song-section {
+            margin: 1rem 0;
+        }
+        
+        .song-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #9d174d;
+            border-left: 4px solid #db2777;
+            padding-left: 10px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .song-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+        
+        .song-list li {
+            margin-bottom: 0.3rem;
+            font-size: 0.85rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        
+        .song-list li::before {
+            content: "♪";
+            position: absolute;
+            left: 0;
+            color: #db2777;
+        }
+        
+        .footer-note {
+            margin-top: 2rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #fce7f3;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #9d174d;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:hover {
+            background: #fdf2f8;
+            transform: translateY(-2px);
+        }
+        
+        /* Loading & Error */
+        .loading-state, .error-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 28px;
+        }
+        
+        .spinner-custom {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #db2777;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .bond-paper-wrapper {
+                overflow-x: auto;
+            }
+            .bond-paper {
+                width: 100%;
+                min-width: 320px;
+                padding: 20px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tool-group {
+                justify-content: space-between;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media print {
+            .toolbar, .back-btn, .bond-paper-wrapper {
+                overflow-x: visible;
+            }
+            .bond-paper {
+                min-width: auto;
+                width: 100%;
+            }
+            .no-print { display: none; }
+            body { background: white; }
+            .bond-paper { box-shadow: none; margin: 0; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="view-container">
+    <a href="record.html" class="back-btn no-print"><i class="fas fa-arrow-left"></i> Back to Records</a>
+    
+    <div class="toolbar no-print">
+        <div class="tool-group">
+            <span class="tool-label">Font Family</span>
+            <select id="fontSelect" class="tool-select">
+                <option value="'Inter', sans-serif">Inter (Modern)</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Georgia', serif">Georgia</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Arial Black', sans-serif">Arial Black (Block)</option>
+                <option value="'Brush Script MT', cursive">Brush Script (Calligraphy)</option>
+                <option value="'Pacifico', cursive">Pacifico (Calligraphy)</option>
+                <option value="'Dancing Script', cursive">Dancing Script</option>
+                <option value="'Verdana', sans-serif">Verdana</option>
+            </select>
+        </div>
+        <div class="tool-group">
+            <span class="tool-label">Font Size (1-10)</span>
+            <input type="range" id="fontSizeSlider" min="1" max="10" value="6" style="width: 120px;">
+            <span id="fontSizeValue" style="width: 35px;">6</span>
+        </div>
+        <div class="tool-group">
+            <span class="tool-label">Font Color</span>
+            <input type="color" id="fontColorPicker" value="#000000">
+        </div>
+        <div class="tool-group">
+            <span class="tool-label">Paper Size</span>
+            <select id="paperSizeSelect" class="tool-select">
+                <option value="a4">A4</option>
+                <option value="short">Short (8.5x11)</option>
+                <option value="long">Long (8.5x13)</option>
+            </select>
+        </div>
+        <div class="tool-group">
+            <button class="btn-tool" id="downloadImageBtn"><i class="fas fa-camera me-1"></i> Download HD</button>
+        </div>
+    </div>
+    
+    <div class="bond-paper-wrapper">
+        <div id="bondPaperContainer" class="bond-paper a4">
+            <div id="lineupContent" class="lineup-content">
+                <div class="loading-state">
+                    <div class="spinner-custom"></div>
+                    <p>Loading lineup details...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="navbar_music.js"></script>
+
+<script>
+    (function() {
+        const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let lineupData = null;
+        
+        function getLineupIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+        
+        function formatDate(dateStr) {
+            if (!dateStr) return '—';
+            try {
+                return new Date(dateStr).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch(e) { return dateStr; }
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        function renderLineup(data) {
+            const worshipLeader = data.worship_leader || '—';
+            const serviceDate = formatDate(data.service_date);
+            const guitar = data.guitarist || '—';
+            const drums = data.drummer || '—';
+            const bass = data.bassist || '—';
+            const keys = data.keyboardist || '—';
+            
+            const backupSingers = (data.backup_singers || []).filter(s => s && s.trim()).map(s => `<span class="band-tag">${escapeHtml(s)}</span>`).join('');
+            const praiseList = (data.praise_songs || []).filter(s => s && s.trim()).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+            const worshipList = (data.worship_songs || []).filter(s => s && s.trim()).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+            
+            const opening = data.opening_song ? escapeHtml(data.opening_song) : '—';
+            const welcome = data.welcome_song ? escapeHtml(data.welcome_song) : '—';
+            const closing = data.closing_song ? escapeHtml(data.closing_song) : '—';
+            
+            const html = `
+                <div class="header-center">
+                    <img src="image/mcb.jpg" class="church-logo" alt="MCB Logo" onerror="this.src='https://ui-avatars.com/api/?name=MCB&background=9d174d&color=fff&size=70&bold=true'">
+                    <div class="church-name">Mobilization Church Balilihan</div>
+                    <div class="church-address">Sal-ing, Balilihan, Bohol 6342</div>
+                    <div class="title-center">📋 MUSIC LINE UP</div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-user"></i> Worship Leader</div>
+                        <div class="info-value">${escapeHtml(worshipLeader)}</div>
+                        <div class="info-label mt-2"><i class="fas fa-users"></i> Backup Singers</div>
+                        <div class="band-members">${backupSingers || '<span class="band-tag">—</span>'}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label"><i class="fas fa-calendar"></i> Service Date</div>
+                        <div class="info-value">${serviceDate}</div>
+                        <div class="info-label mt-2"><i class="fas fa-guitar"></i> Band</div>
+                        <div class="band-members">
+                            ${guitar !== '—' ? `<span class="band-tag">🎸 Guitar: ${escapeHtml(guitar)}</span>` : ''}
+                            ${drums !== '—' ? `<span class="band-tag">🥁 Drums: ${escapeHtml(drums)}</span>` : ''}
+                            ${bass !== '—' ? `<span class="band-tag">🎸 Bass: ${escapeHtml(bass)}</span>` : ''}
+                            ${keys !== '—' ? `<span class="band-tag">🎹 Keys: ${escapeHtml(keys)}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="song-section">
+                    <div class="song-title">🎵 Opening Song</div>
+                    <div class="song-list"><li>${opening}</li></div>
+                </div>
+                
+                <div class="song-section">
+                    <div class="song-title">🤝 Welcome Song</div>
+                    <div class="song-list"><li>${welcome}</li></div>
+                </div>
+                
+                <div class="song-section">
+                    <div class="song-title">🙌 Praise Songs</div>
+                    <ul class="song-list">${praiseList || '<li>—</li>'}</ul>
+                </div>
+                
+                <div class="song-section">
+                    <div class="song-title">🕊️ Worship Songs</div>
+                    <ul class="song-list">${worshipList || '<li>—</li>'}</ul>
+                </div>
+                
+                <div class="song-section">
+                    <div class="song-title">✨ Closing Song</div>
+                    <div class="song-list"><li>${closing}</li></div>
+                </div>
+                
+                <div class="footer-note">
+                    <i class="fas fa-id-card"></i> Music Lineup ID: ${escapeHtml(data.lineup_id)} &nbsp;|&nbsp; 
+                    <i class="fas fa-clock"></i> Generated: ${formatDate(data.created_at)}
+                </div>
+            `;
+            document.getElementById('lineupContent').innerHTML = html;
+            applyStyles();
+        }
+        
+        function applyStyles() {
+            const content = document.getElementById('lineupContent');
+            if (!content) return;
+            const fontFamily = document.getElementById('fontSelect').value;
+            const fontSizeLevel = parseInt(document.getElementById('fontSizeSlider').value, 10);
+            // Map 1-10 to 8px-20px (1=8, 10=20)
+            const fontSizePx = 8 + (fontSizeLevel - 1) * (12 / 9);
+            const fontColor = document.getElementById('fontColorPicker').value;
+            content.style.fontFamily = fontFamily;
+            content.style.fontSize = fontSizePx + 'px';
+            content.style.color = fontColor;
+            document.getElementById('fontSizeValue').innerText = fontSizeLevel;
+        }
+        
+        function updatePaperSize() {
+            const container = document.getElementById('bondPaperContainer');
+            const size = document.getElementById('paperSizeSelect').value;
+            container.classList.remove('a4', 'short', 'long');
+            container.classList.add(size);
+        }
+        
+        async function downloadHDImage() {
+            const element = document.getElementById('bondPaperContainer');
+            const originalOverflow = element.style.overflow;
+            element.style.overflow = 'visible';
+            const btn = document.getElementById('downloadImageBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+            try {
+                const canvas = await html2canvas(element, {
+                    scale: 3,
+                    backgroundColor: '#ffffff',
+                    useCORS: true,
+                    logging: false
+                });
+                const link = document.createElement('a');
+                link.download = `MusicLineup_${lineupData?.lineup_id || 'view'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                console.error('Capture error:', err);
+                alert('Error generating image. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                element.style.overflow = originalOverflow;
+            }
+        }
+        
+        async function loadLineup() {
+            const lineupId = getLineupIdFromUrl();
+            if (!lineupId) {
+                document.getElementById('lineupContent').innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                        <h5>No Lineup ID Provided</h5>
+                        <p>Please go back and select a lineup to view.</p>
+                        <a href="record.html" class="btn btn-primary mt-3">Back to Records</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('music_lineups')
+                    .select('*')
+                    .eq('lineup_id', lineupId)
+                    .single();
+                
+                if (error) throw error;
+                if (!data) throw new Error('Lineup not found');
+                lineupData = data;
+                renderLineup(data);
+            } catch (err) {
+                console.error('Load error:', err);
+                document.getElementById('lineupContent').innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                        <h5>Error Loading Lineup</h5>
+                        <p>${err.message}</p>
+                        <a href="record.html" class="btn btn-primary mt-3">Back to Records</a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('fontSelect')?.addEventListener('change', applyStyles);
+        document.getElementById('fontSizeSlider')?.addEventListener('input', applyStyles);
+        document.getElementById('fontColorPicker')?.addEventListener('input', applyStyles);
+        document.getElementById('paperSizeSelect')?.addEventListener('change', updatePaperSize);
+        document.getElementById('downloadImageBtn')?.addEventListener('click', downloadHDImage);
+        
+        loadLineup();
+    })();
+</script>
+
+</body>
+</html>

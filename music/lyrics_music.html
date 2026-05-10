@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Lyrics Manager | Music Ministry | MCB Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+        .lyrics-container { max-width: 1400px; margin: 2rem auto; padding: 0 20px; }
+        .page-header { background: white; border-radius: 28px; padding: 1.5rem 2rem; margin-bottom: 2rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+        .page-header::before { content: '♪ ♫ ♪'; position: absolute; bottom: 5px; right: 20px; font-size: 3rem; opacity: 0.1; color: #9d174d; }
+        .page-header h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #9d174d, #db2777); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.5rem; }
+        .page-header p { color: #64748b; max-width: 700px; margin: 0 auto; }
+        
+        /* Calendar Section */
+        .calendar-section { background: white; border-radius: 24px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .calendar-nav button { background: #fdf2f8; border: 1px solid #fce7f3; padding: 8px 16px; border-radius: 30px; font-weight: 600; transition: all 0.2s; }
+        .calendar-scroll-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(110px, 1fr)); gap: 8px; min-width: 770px; }
+        .calendar-weekday { text-align: center; font-weight: 700; padding: 10px; background: #fdf2f8; border-radius: 12px; color: #9d174d; }
+        .calendar-day { background: #fff; border: 1px solid #fce7f3; border-radius: 16px; padding: 10px; min-height: 100px; cursor: pointer; transition: 0.2s; }
+        .calendar-day:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .day-number { font-weight: 700; margin-bottom: 5px; }
+        .day-event { font-size: 0.7rem; background: #db2777; color: white; padding: 2px 6px; border-radius: 20px; display: inline-block; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+        .holiday-marker { background: #f59e0b; }
+        .weekend-marker { background: #94a3b8; }
+        
+        /* Lineups Table Section */
+        .lineups-section { background: white; border-radius: 24px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .lineups-table th, .lineups-table td { padding: 0.8rem; vertical-align: middle; }
+        .clickable-id { cursor: pointer; color: #db2777; font-weight: 700; text-decoration: underline; }
+        .clickable-id:hover { color: #9d174d; }
+        
+        /* Songs Section */
+        .songs-section { background: white; border-radius: 24px; padding: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .filter-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+        .btn-primary-custom { background: linear-gradient(135deg, #9d174d, #db2777); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 30px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-primary-custom:hover { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(157,23,77,0.3); color: white; }
+        .filter-select { padding: 0.6rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 12px; background: white; font-size: 0.85rem; }
+        .song-table { width: 100%; border-collapse: collapse; }
+        .song-table th, .song-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #fce7f3; }
+        .song-table th { background: #fdf2f8; font-weight: 700; color: #9d174d; }
+        .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn-sm { padding: 4px 10px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-sm:hover { transform: scale(0.95); }
+        .btn-view { background: #3b82f6; color: white; }
+        .btn-edit { background: #f59e0b; color: white; }
+        .btn-add-lyrics { background: #10b981; color: white; }
+        
+        /* Modal */
+        .modal-content { border-radius: 24px; border: none; }
+        .modal-header { background: linear-gradient(135deg, #9d174d, #db2777); color: white; border-radius: 24px 24px 0 0; }
+        .flow-detail { margin-bottom: 1rem; }
+        .flow-detail strong { color: #9d174d; display: block; margin-bottom: 0.3rem; }
+        
+        @media (max-width: 768px) {
+            .calendar-grid { min-width: 700px; }
+            .calendar-day { padding: 5px; min-height: 80px; font-size: 0.7rem; }
+            .day-event { font-size: 0.6rem; white-space: normal; }
+            .lineups-table, .song-table { min-width: 500px; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="lyrics-container">
+    <div class="page-header">
+        <h1><i class="fas fa-music me-2"></i> Lyric Library</h1>
+        <p>View worship schedules on the calendar, browse all lineups, and manage song lyrics.</p>
+        <p class="small text-muted">Click any lineup ID to see the full worship flow (opening, praise, worship, closing).</p>
+    </div>
+    
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+        <div class="calendar-header">
+            <h3><i class="fas fa-calendar-alt me-2"></i> Worship Schedule Calendar</h3>
+            <div class="calendar-nav">
+                <button id="prevMonthBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                <span id="currentMonthDisplay" class="fw-bold px-3"></span>
+                <button id="nextMonthBtn">Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="calendar-scroll-wrapper">
+            <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+    </div>
+    
+    <!-- NEW: Worship Lineups Table -->
+    <div class="lineups-section">
+        <h3 class="mb-3"><i class="fas fa-list-ul me-2"></i> All Worship Lineups</h3>
+        <div class="table-responsive">
+            <table class="table lineups-table">
+                <thead class="table-light">
+                    <tr><th>#</th><th>Lineup ID</th><th>Worship Leader</th><th>Service Date</th><th>Actions</th></tr>
+                </thead>
+                <tbody id="lineupsTableBody">
+                    <tr><td colspan="5" class="text-center py-4">Loading lineups...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Songs Management Section -->
+    <div class="songs-section">
+        <div class="filter-bar">
+            <div>
+                <label class="fw-bold me-2">Filter by Lineup ID:</label>
+                <select id="lineupFilter" class="filter-select">
+                    <option value="all">All Songs</option>
+                </select>
+            </div>
+            <button class="btn-primary-custom" id="addSongBtn"><i class="fas fa-plus-circle"></i> Add New Song</button>
+        </div>
+        <div class="table-responsive">
+            <table class="song-table">
+                <thead><tr><th>ID</th><th>Title</th><th>Lineup ID</th><th>Actions</th></tr></thead>
+                <tbody id="songsTableBody"><tr><td colspan="4" class="text-center py-4">Loading songs...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Full Worship Flow -->
+<div class="modal fade" id="flowModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-church me-2"></i>Worship Flow Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="flowModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Lineup Details (original calendar click) -->
+<div class="modal fade" id="lineupModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"><i class="fas fa-calendar-day me-2"></i>Worship Team Schedule</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body" id="lineupModalBody"></div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="navbar_music.js"></script>
+
+<script>
+(function() {
+    const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
+    try {
+        const session = localStorage.getItem('mcb_user_session') || sessionStorage.getItem('mcb_user_session');
+        if (session) currentUserId = JSON.parse(session).id;
+    } catch(e) {}
+
+    // ---------- Calendar data ----------
+    let currentDate = new Date();
+    let allLineups = [];
+
+    async function fetchAllLineups() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('music_lineups')
+                .select('lineup_id, worship_leader, service_date, backup_singers, guitarist, drummer, bassist, keyboardist, opening_song, welcome_song, praise_songs, worship_songs, closing_song');
+            if (error) throw error;
+            allLineups = data || [];
+            renderCalendar();
+            renderLineupsTable();
+        } catch(err) { console.error(err); renderCalendar(); renderLineupsTable(); }
+    }
+
+    function getHolidays(year) {
+        return [
+            { month: 0, day: 1, name: "New Year's Day" },
+            { month: 3, day: 9, name: "Araw ng Kagitingan" },
+            { month: 4, day: 1, name: "Labor Day" },
+            { month: 5, day: 12, name: "Independence Day" },
+            { month: 7, day: 21, name: "Ninoy Aquino Day" },
+            { month: 7, day: 28, name: "National Heroes Day" },
+            { month: 10, day: 30, name: "Bonifacio Day" },
+            { month: 11, day: 25, name: "Christmas Day" },
+            { month: 11, day: 30, name: "Rizal Day" },
+            { month: 11, day: 31, name: "New Year's Eve" }
+        ];
+    }
+    function isWeekend(date) { let d = date.getDay(); return d === 0 || d === 6; }
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
+        const firstDay = new Date(year, month, 1);
+        const startWeekday = firstDay.getDay();
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        document.getElementById('currentMonthDisplay').innerText = `${monthNames[month]} ${year}`;
+        const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        let gridHtml = weekdays.map(d => `<div class="calendar-weekday">${d}</div>`).join('');
+        let day = 1;
+        for (let i = 0; i < 42; i++) {
+            if (i < startWeekday || day > daysInMonth) {
+                gridHtml += `<div class="calendar-day" style="background:#fafafa; opacity:0.5;"></div>`;
+                continue;
+            }
+            const currentDay = new Date(year, month, day);
+            const dateStr = currentDay.toISOString().split('T')[0];
+            const lineup = allLineups.find(l => l.service_date === dateStr);
+            const holiday = getHolidays(year).find(h => h.month === month && h.day === day);
+            let marker = '', markerClass = '';
+            if (holiday) { marker = holiday.name; markerClass = 'holiday-marker'; }
+            else if (isWeekend(currentDay) && !lineup) { marker = currentDay.getDay() === 0 ? 'Sunday' : 'Saturday'; markerClass = 'weekend-marker'; }
+            gridHtml += `
+                <div class="calendar-day" data-date="${dateStr}" data-lineup='${lineup ? JSON.stringify(lineup).replace(/'/g, "&#39;") : ''}'>
+                    <div class="day-number">${day}</div>
+                    ${lineup ? `<div class="day-event">🎵 ${escapeHtml(lineup.worship_leader)}</div>` : ''}
+                    ${marker ? `<div class="day-event ${markerClass}" style="background:${markerClass==='holiday-marker'?'#f59e0b':'#94a3b8'}">${escapeHtml(marker)}</div>` : ''}
+                </div>`;
+            day++;
+        }
+        document.getElementById('calendarGrid').innerHTML = gridHtml;
+        document.querySelectorAll('.calendar-day[data-date]').forEach(el => {
+            el.addEventListener('click', () => {
+                const data = el.getAttribute('data-lineup');
+                if (data && data !== '') showLineupModal(JSON.parse(data));
+                else showLineupModal(null, el.getAttribute('data-date'));
+            });
+        });
+    }
+
+    function showLineupModal(lineup, date) {
+        const body = document.getElementById('lineupModalBody');
+        if (lineup) {
+            const backupHtml = (lineup.backup_singers || []).map(s => `<span class="badge bg-secondary me-1">${escapeHtml(s)}</span>`).join('');
+            body.innerHTML = `
+                <p><strong>📅 Date:</strong> ${escapeHtml(lineup.service_date)}</p>
+                <p><strong>🎤 Worship Leader:</strong> ${escapeHtml(lineup.worship_leader)}</p>
+                <p><strong>🎶 Backup Singers:</strong> ${backupHtml || '—'}</p>
+                <p><strong>🎸 Guitarist:</strong> ${escapeHtml(lineup.guitarist || '—')}</p>
+                <p><strong>🥁 Drummer:</strong> ${escapeHtml(lineup.drummer || '—')}</p>
+                <p><strong>🎸 Bass:</strong> ${escapeHtml(lineup.bassist || '—')}</p>
+                <p><strong>🎹 Keys:</strong> ${escapeHtml(lineup.keyboardist || '—')}</p>`;
+        } else {
+            body.innerHTML = `<p>No worship lineup scheduled for <strong>${escapeHtml(date)}</strong>.</p>`;
+        }
+        new bootstrap.Modal(document.getElementById('lineupModal')).show();
+    }
+
+    // ---------- NEW: Render lineups table with clickable ID ----------
+    function renderLineupsTable() {
+        const tbody = document.getElementById('lineupsTableBody');
+        if (!allLineups.length) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No worship lineups found.</td></tr>';
+            return;
+        }
+        let html = '';
+        allLineups.forEach((l, idx) => {
+            html += `
+                <tr>
+                    <td>${idx+1}</td>
+                    <td><span class="clickable-id" data-lineup-id="${escapeHtml(l.lineup_id)}">${escapeHtml(l.lineup_id)}</span></td>
+                    <td>${escapeHtml(l.worship_leader)}</td>
+                    <td>${escapeHtml(l.service_date)}</td>
+                    <td><button class="btn-sm btn-view" data-view-flow="${escapeHtml(l.lineup_id)}"><i class="fas fa-eye"></i> View Flow</button></td>
+                </tr>`;
+        });
+        tbody.innerHTML = html;
+        // Attach click events to ID spans and view buttons
+        document.querySelectorAll('.clickable-id').forEach(el => {
+            el.addEventListener('click', () => showFullFlow(el.getAttribute('data-lineup-id')));
+        });
+        document.querySelectorAll('[data-view-flow]').forEach(btn => {
+            btn.addEventListener('click', () => showFullFlow(btn.getAttribute('data-view-flow')));
+        });
+    }
+
+    function showFullFlow(lineupId) {
+        const lineup = allLineups.find(l => l.lineup_id === lineupId);
+        if (!lineup) return;
+        const opening = lineup.opening_song || '—';
+        const welcome = lineup.welcome_song || '—';
+        const praise = (lineup.praise_songs || []).map(s => `<li>${escapeHtml(s)}</li>`).join('') || '<li>—</li>';
+        const worship = (lineup.worship_songs || []).map(s => `<li>${escapeHtml(s)}</li>`).join('') || '<li>—</li>';
+        const closing = lineup.closing_song || '—';
+        const modalBody = document.getElementById('flowModalBody');
+        modalBody.innerHTML = `
+            <div class="flow-detail"><strong>🎵 Opening Song</strong> ${escapeHtml(opening)}</div>
+            <div class="flow-detail"><strong>🤝 Welcome Song</strong> ${escapeHtml(welcome)}</div>
+            <div class="flow-detail"><strong>🙌 Praise Songs</strong><ul>${praise}</ul></div>
+            <div class="flow-detail"><strong>🕊️ Worship Songs</strong><ul>${worship}</ul></div>
+            <div class="flow-detail"><strong>✨ Closing Song</strong> ${escapeHtml(closing)}</div>
+        `;
+        new bootstrap.Modal(document.getElementById('flowModal')).show();
+    }
+
+    // ---------- Songs Section (unchanged) ----------
+    let songsList = [];
+    async function loadSongs() {
+        if (!currentUserId) {
+            document.getElementById('songsTableBody').innerHTML = '<tr><td colspan="4" class="text-center">Please login to manage songs.</td></tr>';
+            return;
+        }
+        try {
+            const { error: testErr } = await supabaseClient.from('songs').select('count', { count: 'exact', head: true });
+            if (testErr && testErr.code === '42P01') {
+                document.getElementById('songsTableBody').innerHTML = `<tr><td colspan="4" class="text-center text-warning">⚠️ The "songs" table does not exist yet.<br>Please run the SQL script to create the "songs" table.</td></tr>`;
+                return;
+            }
+            const { data, error } = await supabaseClient.from('songs').select('*').eq('user_id', currentUserId).order('title');
+            if (error) throw error;
+            songsList = data || [];
+            applyFilter();
+        } catch (err) {
+            console.error(err);
+            document.getElementById('songsTableBody').innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading songs.</td></tr>';
+        }
+    }
+
+    async function populateFilter() {
+        const select = document.getElementById('lineupFilter');
+        select.innerHTML = '<option value="all">All Songs</option>';
+        const { data } = await supabaseClient.from('music_lineups').select('lineup_id').order('service_date', { ascending: false });
+        if (data && data.length) {
+            [...new Set(data.map(l => l.lineup_id))].forEach(id => {
+                select.innerHTML += `<option value="${escapeHtml(id)}">${escapeHtml(id)}</option>`;
+            });
+        }
+    }
+
+    function applyFilter() {
+        const filter = document.getElementById('lineupFilter').value;
+        let filtered = songsList;
+        if (filter !== 'all') filtered = songsList.filter(s => s.lineup_id === filter);
+        renderSongs(filtered);
+    }
+
+    function renderSongs(songs) {
+        const tbody = document.getElementById('songsTableBody');
+        if (!songs.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No songs found. Click "Add New Song".</td></tr>';
+            return;
+        }
+        let html = '';
+        songs.forEach((s, i) => {
+            html += `<tr>
+                <td>${i+1}</td>
+                <td><strong>${escapeHtml(s.title)}</strong></td>
+                <td><code>${escapeHtml(s.lineup_id || '—')}</code></td>
+                <td class="action-btns">
+                    <button class="btn-sm btn-view" onclick="viewSong('${s.song_id}')"><i class="fas fa-eye"></i> View</button>
+                    <button class="btn-sm btn-edit" onclick="editSong('${s.song_id}')"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-sm btn-add-lyrics" onclick="addLyrics('${s.song_id}')"><i class="fas fa-music"></i> Lyrics</button>
+                </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+    }
+
+    window.viewSong = (id) => window.location.href = `view_lyrics.html?id=${id}`;
+    window.editSong = (id) => window.location.href = `edit_lyrics.html?id=${id}`;
+    window.addLyrics = (id) => window.location.href = `lyrics_song.html?id=${id}`;
+    document.getElementById('addSongBtn').addEventListener('click', () => window.location.href = 'add_song.html');
+    document.getElementById('lineupFilter').addEventListener('change', applyFilter);
+
+    document.getElementById('prevMonthBtn').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); });
+    document.getElementById('nextMonthBtn').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); });
+
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+
+    async function init() {
+        await fetchAllLineups();
+        await populateFilter();
+        await loadSongs();
+    }
+    init();
+})();
+</script>
+</body>
+</html>

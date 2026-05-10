@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Logout | Music Ministry | MCB Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%);
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
+        }
+        
+        /* Music Notes Background */
+        body::before {
+            content: '♪ ♫ ♪ ♫ ♪';
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 8rem;
+            opacity: 0.05;
+            color: #9d174d;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        body::after {
+            content: '♫ ♪ ♫ ♪ ♫';
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 6rem;
+            opacity: 0.05;
+            color: #be185d;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Logout Container */
+        .logout-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Logout Card - Music Themed */
+        .logout-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .logout-card::before {
+            content: '🎵';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5rem;
+            opacity: 0.1;
+        }
+        
+        .logout-card::after {
+            content: '🎶';
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            opacity: 0.1;
+        }
+        
+        .logout-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Header Section - Music Gradient */
+        .logout-header {
+            background: linear-gradient(135deg, #9d174d, #be185d, #db2777);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .logout-header::before {
+            content: '♪';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+        
+        .logout-header::after {
+            content: '♫';
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+        
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .logout-icon i {
+            font-size: 2.5rem;
+        }
+        
+        .logout-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .logout-header h2 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .logout-header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        /* Profile Section - Music Style */
+        .profile-section {
+            padding: 1.5rem 1.8rem;
+            background: linear-gradient(135deg, #fff5f9, #ffffff);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .profile-avatar-large {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #db2777;
+            box-shadow: 0 4px 12px rgba(219,39,119,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .profile-avatar-large:hover {
+            transform: scale(1.05);
+        }
+        
+        .profile-info h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #9d174d;
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-info p {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0;
+        }
+        
+        .member-id {
+            background: #fdf2f8;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #db2777;
+            display: inline-block;
+        }
+        
+        /* Warning Section - Music Themed */
+        .warning-section {
+            padding: 1.5rem 1.8rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: #fefce8;
+        }
+        
+        .warning-icon {
+            width: 60px;
+            height: 60px;
+            background: #fef3c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .warning-icon i {
+            font-size: 1.8rem;
+            color: #f59e0b;
+        }
+        
+        .warning-section h5 {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .warning-section p {
+            color: #b45309;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        
+        .save-reminder {
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+            color: #78716c;
+        }
+        
+        /* Action Buttons - Music Style */
+        .action-buttons {
+            padding: 1.5rem 1.8rem 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 0.85rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+            color: #9d174d;
+        }
+        
+        .btn-logout {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+        }
+        
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220,38,38,0.4);
+        }
+        
+        /* Loading State */
+        .loading-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 1.8rem;
+        }
+        
+        .skeleton-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #fce7f3 25%, #fdf2f8 50%, #fce7f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .skeleton-text {
+            height: 15px;
+            background: linear-gradient(90deg, #fce7f3 25%, #fdf2f8 50%, #fce7f3 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .skeleton-text.short {
+            width: 120px;
+        }
+        
+        .skeleton-text.long {
+            width: 180px;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Music Note Floating Animation */
+        .music-note {
+            position: fixed;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .logout-container {
+                margin: 1.5rem auto;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-cancel, .btn-logout {
+                padding: 0.75rem 1.5rem;
+            }
+            
+            .logout-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .logout-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logout-icon i {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="logout-container">
+    <div class="logout-card">
+        <!-- Header -->
+        <div class="logout-header">
+            <div class="logout-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <h2>🎵 Logout</h2>
+            <p>Music Ministry Session Management</p>
+        </div>
+        
+        <!-- Dynamic Profile Content -->
+        <div id="profileContent">
+            <div class="loading-profile">
+                <div class="skeleton-avatar"></div>
+                <div>
+                    <div class="skeleton-text short"></div>
+                    <div class="skeleton-text long"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Warning Section -->
+        <div class="warning-section">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h5>Are you sure you want to logout?</h5>
+            <p>You will need to login again to access your Music Ministry account.</p>
+            <div class="save-reminder">
+                <i class="fas fa-save me-1"></i> Please save your worship setlist before logging out
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-cancel" id="cancelBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="navbar_music.js"></script>
+
+<script>
+    // ======================== SUPABASE CONFIGURATION ========================
+    const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+    
+    let supabaseClient = null;
+    let currentUser = null;
+    
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase client initialized");
+    }
+    
+    // Helper: Get avatar URL
+    function getAvatarUrl(name, size = 70) {
+        if (!name) name = 'Music Director';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials || 'MD')}&background=db2777&color=fff&size=${size}&bold=true&font-size=30&rounded=true`;
+    }
+    
+    // Escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Get user session
+    function getUserSession() {
+        try {
+            const session = localStorage.getItem('mcb_user_session') || sessionStorage.getItem('mcb_user_session');
+            if (session) {
+                return JSON.parse(session);
+            }
+        } catch(e) {
+            console.error("Error parsing session:", e);
+        }
+        return null;
+    }
+    
+    // Load user profile from Supabase
+    async function loadUserProfile() {
+        const sessionUser = getUserSession();
+        
+        if (!sessionUser) {
+            showNoSessionProfile();
+            return;
+        }
+        
+        currentUser = sessionUser;
+        
+        if (supabaseClient && sessionUser.id) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('church_users')
+                    .select('id, full_name, email, role, profile_image, username')
+                    .eq('id', sessionUser.id)
+                    .single();
+                
+                if (!error && data) {
+                    currentUser = {
+                        ...currentUser,
+                        full_name: data.full_name || currentUser.full_name,
+                        email: data.email || currentUser.email,
+                        role: data.role || currentUser.role,
+                        profile_image: data.profile_image || currentUser.profile_image,
+                        username: data.username || currentUser.username
+                    };
+                }
+            } catch (err) {
+                console.log("Could not fetch latest user data, using session data");
+            }
+        }
+        
+        renderProfile(currentUser);
+    }
+    
+    function renderProfile(user) {
+        const profileContainer = document.getElementById('profileContent');
+        const fullName = user.full_name || 'Music Ministry Member';
+        const email = user.email || 'music@mobilizationchurch.com';
+        const role = user.role || 'music';
+        const memberId = user.id || 'N/A';
+        
+        let profileImg = getAvatarUrl(fullName, 70);
+        if (user.profile_image && user.profile_image !== '' && user.profile_image !== 'null') {
+            profileImg = user.profile_image;
+        }
+        
+        const roleLabels = {
+            'member': 'Member',
+            'music': 'Music Ministry 🎵',
+            'program': 'Program Ministry',
+            'pastor': 'Pastor',
+            'officer': 'Church Officer'
+        };
+        const roleLabel = roleLabels[role] || 'Music Ministry 🎵';
+        
+        const html = `
+            <div class="profile-section">
+                <img class="profile-avatar-large" src="${profileImg}" alt="Profile" 
+                     onerror="this.onerror=null; this.src='${getAvatarUrl(fullName, 70)}'">
+                <div class="profile-info">
+                    <h4>${escapeHtml(fullName)}</h4>
+                    <p><i class="fas fa-envelope me-1"></i> ${escapeHtml(email)}</p>
+                    <p><i class="fas fa-tag me-1"></i> ${escapeHtml(roleLabel)}</p>
+                    <div class="member-id mt-1">
+                        <i class="fas fa-id-card me-1"></i> ID: #${memberId}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        profileContainer.innerHTML = html;
+    }
+    
+    function showNoSessionProfile() {
+        const profileContainer = document.getElementById('profileContent');
+        profileContainer.innerHTML = `
+            <div class="profile-section">
+                <img class="profile-avatar-large" src="${getAvatarUrl('Guest', 70)}" alt="Profile">
+                <div class="profile-info">
+                    <h4>Guest User</h4>
+                    <p><i class="fas fa-envelope me-1"></i> Not logged in</p>
+                    <p><i class="fas fa-tag me-1"></i> Visitor</p>
+                    <div class="member-id mt-1">
+                        <i class="fas fa-id-card me-1"></i> ID: ---
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Perform logout
+    async function performLogout() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        const originalText = logoutBtn.innerHTML;
+        logoutBtn.disabled = true;
+        logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging out...';
+        
+        try {
+            // Clear all session storage
+            localStorage.removeItem('mcb_user_session');
+            sessionStorage.removeItem('mcb_user_session');
+            localStorage.removeItem('program_current_user');
+            sessionStorage.removeItem('program_current_user');
+            localStorage.removeItem('music_current_user');
+            sessionStorage.removeItem('music_current_user');
+            
+            // Clear any other church-related data
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && (key.includes('mcb_') || key.includes('church_') || key.includes('program_') || key.includes('music_'))) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            
+            await new Promise(resolve => setTimeout(resolve, 200));
+            window.location.href = '../login.html';
+            
+        } catch (err) {
+            console.error("Logout error:", err);
+            logoutBtn.disabled = false;
+            logoutBtn.innerHTML = originalText;
+            showToastMessage("Error during logout. Please try again.", "error");
+        }
+    }
+    
+    // Cancel - Go back to index.html
+    function cancelLogout() {
+        window.location.href = 'index.html';
+    }
+    
+    function showToastMessage(message, type = 'info') {
+        const toastColors = {
+            info: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+            warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            error: 'linear-gradient(135deg, #ef4444, #dc2626)'
+        };
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${toastColors[type]};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            max-width: 90%;
+            text-align: center;
+        `;
+        toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} me-2"></i>${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
+    // Event listeners
+    document.getElementById('cancelBtn')?.addEventListener('click', cancelLogout);
+    document.getElementById('logoutBtn')?.addEventListener('click', performLogout);
+    
+    // Initialize
+    loadUserProfile();
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            cancelLogout();
+        }
+    });
+    
+    console.log("✅ Music Ministry Logout page loaded");
+</script>
+
+</body>
+</html>

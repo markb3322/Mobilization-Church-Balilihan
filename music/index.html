@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Music Ministry Dashboard | MCB Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            padding-bottom: 85px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 20px;
+        }
+        
+        /* Section 1: Hero Banner with Music Theme */
+        .hero-banner {
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #9d174d, #be185d, #db2777);
+        }
+        
+        /* User background image overlay */
+        .hero-banner.has-user-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+            z-index: 0;
+        }
+        
+        .hero-banner::after {
+            content: '♪ ♫ ♪';
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 6rem;
+            opacity: 0.1;
+            color: white;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .greeting-text {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fbcfe8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .user-subtitle {
+            font-size: 0.9rem;
+            color: #fce7f3;
+        }
+        
+        .hero-profile {
+            position: relative;
+            z-index: 2;
+            text-align: right;
+            cursor: pointer;
+        }
+        
+        .hero-profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fbbf24;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .hero-profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .hero-role {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            padding: 0.25rem 0.9rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+        }
+        
+        /* Section 2: Birthday Celebrants */
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #9d174d;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #db2777;
+            font-size: 1.5rem;
+        }
+        
+        .celebrants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .celebrant-card {
+            background: linear-gradient(135deg, #ffffff, #fefce8);
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #fde047;
+        }
+        
+        .celebrant-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .celebrant-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fbbf24;
+        }
+        
+        .celebrant-info {
+            flex: 1;
+        }
+        
+        .celebrant-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+        
+        .celebrant-birthday {
+            font-size: 0.75rem;
+            color: #db2777;
+            margin-bottom: 0.5rem;
+        }
+        
+        .celebrant-message {
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+        
+        .celebrant-message p {
+            margin-bottom: 0.2rem;
+        }
+        
+        .celebrant-message small {
+            color: #db2777;
+            font-weight: 600;
+        }
+        
+        .bible-verse {
+            font-style: italic;
+            color: #9d174d;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            padding-top: 0.3rem;
+            border-top: 1px dashed #fde047;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 1rem;
+            color: #64748b;
+        }
+        
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        /* Loading States */
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner-sm {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #db2777;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .click-hint {
+            font-size: 0.6rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0 12px;
+                margin: 1rem auto;
+            }
+            
+            .hero-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.2rem;
+                min-height: auto;
+            }
+            
+            .hero-profile {
+                text-align: center;
+                margin-top: 0.8rem;
+            }
+            
+            .user-name {
+                font-size: 1.5rem;
+            }
+            
+            .greeting-text {
+                font-size: 0.75rem;
+            }
+            
+            .user-subtitle {
+                font-size: 0.75rem;
+            }
+            
+            .hero-profile-img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .hero-role {
+                font-size: 0.65rem;
+            }
+            
+            .section-card {
+                padding: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .celebrants-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            .celebrant-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            
+            .celebrant-avatar {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .celebrant-message {
+                font-size: 0.75rem;
+            }
+            
+            .click-hint {
+                font-size: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 0 10px;
+            }
+            
+            .user-name {
+                font-size: 1.3rem;
+            }
+            
+            .hero-profile-img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="dashboard-container">
+    <!-- Section 1: Hero Banner with Greeting -->
+    <div class="hero-banner" id="heroBanner">
+        <div class="hero-content">
+            <div class="greeting-text" id="greetingText">🌅 Good Morning</div>
+            <h1 class="user-name" id="userFullName">Loading...</h1>
+            <p class="user-subtitle" id="userSubtitle">Music Ministry Director</p>
+        </div>
+        <div class="hero-profile" id="profileClickArea">
+            <img class="hero-profile-img" id="profileImage" src="https://ui-avatars.com/api/?name=MD&background=db2777&color=fff&size=80&rounded=true" alt="Profile">
+            <div>
+                <span class="hero-role" id="userRole">🎵 Music Ministry</span>
+            </div>
+            <div class="click-hint"><i class="fas fa-mouse-pointer"></i> Click profile to view details</div>
+        </div>
+    </div>
+    
+    <!-- Section 2: Birthday Celebrants -->
+    <div class="section-card">
+        <div class="section-title">
+            <i class="fas fa-birthday-cake"></i>
+            <span>🎂 Birthday Celebrants This Month</span>
+        </div>
+        <div id="birthdayContainer">
+            <div class="loading-spinner">
+                <div class="spinner-sm"></div>
+                <p>Loading birthday celebrants...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="navbar_music.js"></script>
+
+<script>
+    // ======================== SUPABASE CONFIGURATION ========================
+    const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+    
+    let supabaseClient = null;
+    let currentUserId = null;
+    let currentUser = null;
+    
+    // Helper: Get data with error handling for storage quota
+    function safeGetSession() {
+        try {
+            const session = localStorage.getItem('mcb_user_session') || sessionStorage.getItem('mcb_user_session');
+            if (session) {
+                return JSON.parse(session);
+            }
+        } catch(e) {
+            console.log("Error reading session:", e);
+            // Clear corrupted session data
+            try {
+                localStorage.removeItem('mcb_user_session');
+                sessionStorage.removeItem('mcb_user_session');
+            } catch(clearErr) {}
+        }
+        return null;
+    }
+    
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase client initialized");
+    }
+    
+    // Load user from session - fixed QuotaExceededError
+    try {
+        const user = safeGetSession();
+        if (user) {
+            currentUserId = user.id;
+            currentUser = {
+                id: user.id,
+                full_name: user.full_name || 'Music Director',
+                role: user.role || 'music',
+                email: user.email || 'music@mobilizationchurch.com',
+                profile_image: user.profile_image || null,
+                background_image: user.background_image || null,
+                username: user.username || 'music_director'
+            };
+            console.log("✅ User loaded from session:", currentUser.full_name);
+        }
+    } catch(e) {
+        console.log("Error loading session, using default");
+    }
+    
+    // Helper: Get greeting based on Philippine time
+    function getGreeting() {
+        const hour = new Date().getHours();
+        if (hour >= 4 && hour < 12) return '🌅 Good Morning';
+        if (hour >= 12 && hour < 18) return '☀️ Good Afternoon';
+        if (hour >= 18 && hour < 22) return '🌤️ Good Evening';
+        return '🌙 Good Night';
+    }
+    
+    function getGreetingEmoji() {
+        const hour = new Date().getHours();
+        if (hour >= 4 && hour < 12) return 'Rise & Shine! ☕';
+        if (hour >= 12 && hour < 18) return 'Blessed Afternoon! 🙏';
+        if (hour >= 18 && hour < 22) return 'Peaceful Evening! ✨';
+        return 'Rest in His Presence 🕯️';
+    }
+    
+    function getAvatarUrl(name) {
+        if (!name) name = 'Music Director';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials || 'MD')}&background=db2777&color=fff&size=80&bold=true&rounded=true`;
+    }
+    
+    // Set hero banner background from user's background_image
+    function setHeroBackground() {
+        const heroBanner = document.getElementById('heroBanner');
+        // Reset to default gradient first
+        heroBanner.style.background = 'linear-gradient(135deg, #9d174d, #be185d, #db2777)';
+        heroBanner.style.backgroundSize = 'auto';
+        heroBanner.classList.remove('has-user-bg');
+        
+        if (currentUser?.background_image && currentUser.background_image !== '' && currentUser.background_image !== 'null') {
+            try {
+                if (currentUser.background_image.startsWith('data:image') || 
+                    currentUser.background_image.startsWith('http')) {
+                    heroBanner.style.background = `linear-gradient(135deg, rgba(157,23,77,0.7), rgba(219,39,119,0.7)), url('${currentUser.background_image}')`;
+                    heroBanner.style.backgroundSize = 'cover';
+                    heroBanner.style.backgroundPosition = 'center';
+                    heroBanner.classList.add('has-user-bg');
+                    console.log("✅ User background image applied");
+                }
+            } catch(e) {
+                console.log("Could not apply user background image:", e);
+            }
+        }
+    }
+    
+    function setUserProfile() {
+        const fullName = currentUser?.full_name || 'Music Director';
+        document.getElementById('userFullName').textContent = fullName;
+        document.getElementById('userSubtitle').textContent = 'Music Ministry Director • Mobilization Church Balilihan';
+        document.getElementById('userRole').innerHTML = '🎵 Music Ministry';
+        document.getElementById('greetingText').innerHTML = `${getGreeting()} • ${getGreetingEmoji()}`;
+        
+        const profileImg = document.getElementById('profileImage');
+        if (currentUser?.profile_image && currentUser.profile_image !== '' && currentUser.profile_image !== 'null') {
+            profileImg.src = currentUser.profile_image;
+            profileImg.onerror = () => {
+                profileImg.src = getAvatarUrl(fullName);
+            };
+        } else {
+            profileImg.src = getAvatarUrl(fullName);
+        }
+        
+        // Apply background image
+        setHeroBackground();
+    }
+    
+    function setupProfileClickHandler() {
+        const profileArea = document.getElementById('profileClickArea');
+        if (profileArea) {
+            profileArea.style.cursor = 'pointer';
+            profileArea.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (currentUserId) {
+                    window.location.href = `view.html?id=${currentUserId}`;
+                } else {
+                    showToastMessage('User profile not found. Please login again.', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '../login.html';
+                    }, 2000);
+                }
+            });
+        }
+    }
+    
+    function showToastMessage(message, type = 'info') {
+        const toastColors = {
+            info: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+            warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            error: 'linear-gradient(135deg, #ef4444, #dc2626)'
+        };
+        
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${toastColors[type]};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            max-width: 90%;
+            text-align: center;
+        `;
+        toast.innerHTML = `<i class="fas fa-info-circle me-2"></i>${message}`;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
+    function updateGreeting() {
+        document.getElementById('greetingText').innerHTML = `${getGreeting()} • ${getGreetingEmoji()}`;
+    }
+    
+    // Fetch birthday celebrants for current month
+    async function fetchBirthdayCelebrants() {
+        const container = document.getElementById('birthdayContainer');
+        
+        if (!supabaseClient) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-database"></i>
+                    <p>Supabase connection not configured.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        try {
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1;
+            
+            const { data, error } = await supabaseClient
+                .from('church_users')
+                .select('id, full_name, nickname, birthday, profile_image, role')
+                .not('birthday', 'is', null)
+                .order('birthday', { ascending: true });
+            
+            if (error) {
+                console.error("Error fetching birthdays:", error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Unable to load birthday data. Please try again later.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-gift"></i>
+                        <p>No birthday records found. Add member birthdays in the registration form.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const celebrants = data.filter(member => {
+                if (!member.birthday) return false;
+                const birthDate = new Date(member.birthday);
+                const birthMonth = birthDate.getMonth() + 1;
+                return birthMonth === currentMonth;
+            });
+            
+            if (celebrants.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-day"></i>
+                        <p>No birthday celebrants this month. Check back next month!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            celebrants.sort((a, b) => {
+                const dayA = new Date(a.birthday).getDate();
+                const dayB = new Date(b.birthday).getDate();
+                return dayA - dayB;
+            });
+            
+            let html = '<div class="celebrants-grid">';
+            
+            for (const member of celebrants) {
+                const fullName = member.full_name || 'Church Member';
+                const nickname = member.nickname ? `"${member.nickname}"` : '';
+                const birthDate = new Date(member.birthday);
+                const formattedBirthday = birthDate.toLocaleDateString('en-PH', { month: 'long', day: 'numeric' });
+                const birthYear = birthDate.getFullYear();
+                const age = new Date().getFullYear() - birthYear;
+                
+                let profileImg = getAvatarUrl(fullName);
+                if (member.profile_image && member.profile_image !== '' && member.profile_image !== 'null') {
+                    profileImg = member.profile_image;
+                }
+                
+                html += `
+                    <div class="celebrant-card">
+                        <img class="celebrant-avatar" src="${profileImg}" alt="${fullName}"
+                             onerror="this.onerror=null; this.src='${getAvatarUrl(fullName)}'">
+                        <div class="celebrant-info">
+                            <div class="celebrant-name">${escapeHtml(fullName)} ${nickname ? `<small>${escapeHtml(nickname)}</small>` : ''}</div>
+                            <div class="celebrant-birthday"><i class="fas fa-cake-candles"></i> ${formattedBirthday} • ${age} years old</div>
+                            <div class="celebrant-message">
+                                <p><small><i class="fas fa-heart" style="color: #db2777;"></i> 🎵 Happy Birthday from Music Ministry!</small></p>
+                                <p>May the Lord bless you with joy and peace on your special day! Your service in God's house is a blessing to us all.</p>
+                                <p class="mt-1"><small>Let your heart sing praises to the Lord on this day He has made!</small></p>
+                            </div>
+                            <div class="bible-verse">
+                                <i class="fas fa-quote-left me-1"></i> "Make a joyful noise unto the Lord, all ye lands. Serve the Lord with gladness." — Psalm 100:1-2
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+            
+        } catch (err) {
+            console.error("Error:", err);
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-wifi"></i>
+                    <p>Network error. Please refresh the page.</p>
+                </div>
+            `;
+        }
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Fetch user data from Supabase (without storage issues)
+    async function fetchUserFromSupabase() {
+        if (!supabaseClient || !currentUserId) return;
+        
+        try {
+            const { data, error } = await supabaseClient
+                .from('church_users')
+                .select('id, full_name, email, role, profile_image, background_image, username')
+                .eq('id', currentUserId)
+                .single();
+            
+            if (!error && data) {
+                let updated = false;
+                if (data.profile_image && data.profile_image !== (currentUser?.profile_image)) {
+                    currentUser.profile_image = data.profile_image;
+                    updated = true;
+                }
+                if (data.background_image && data.background_image !== (currentUser?.background_image)) {
+                    currentUser.background_image = data.background_image;
+                    updated = true;
+                }
+                if (data.full_name && data.full_name !== (currentUser?.full_name)) {
+                    currentUser.full_name = data.full_name;
+                    updated = true;
+                }
+                
+                if (updated) {
+                    setUserProfile();
+                    console.log("✅ User data updated from Supabase");
+                }
+            }
+        } catch (err) {
+            console.error("Error fetching user from Supabase:", err.message);
+        }
+    }
+    
+    async function initDashboard() {
+        setUserProfile();
+        fetchBirthdayCelebrants();
+        setupProfileClickHandler();
+        updateGreeting();
+        
+        if (currentUserId) {
+            await fetchUserFromSupabase();
+        }
+        
+        setInterval(() => {
+            updateGreeting();
+        }, 60000);
+        
+        setInterval(() => {
+            fetchBirthdayCelebrants();
+        }, 3600000);
+    }
+    
+    if (currentUser) {
+        try {
+            localStorage.setItem('music_current_user', JSON.stringify(currentUser));
+        } catch(e) {
+            console.log("Storage quota exceeded, skipping save");
+        }
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    } else {
+        initDashboard();
+    }
+</script>
+
+</body>
+</html>

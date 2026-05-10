@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Add Song | Music Ministry | MCB Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 80px;
+        }
+
+        .song-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            background: white;
+            border-radius: 28px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .tool-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #9d174d;
+        }
+
+        .tool-select, .tool-input, .tool-color {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        .btn-tool, .btn-save, .btn-back {
+            background: linear-gradient(135deg, #9d174d, #db2777);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-tool:hover, .btn-save:hover, .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(157,23,77,0.3);
+        }
+
+        /* Bond Paper Container */
+        .bond-paper-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 2rem;
+        }
+
+        .bond-paper {
+            background: white;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            padding: 2rem;
+            border-radius: 24px;
+        }
+
+        .bond-paper.a4 { max-width: 210mm; }
+        .bond-paper.long { max-width: 8.5in; min-height: 13in; }
+        .bond-paper.short { max-width: 8.5in; min-height: 11in; }
+
+        /* Two column lyrics / chords */
+        .two-columns {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .column {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #9d174d;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        .form-control, .form-select {
+            border-radius: 14px;
+            border: 1.5px solid #e2e8f0;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        textarea.form-control {
+            min-height: 250px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        /* Preview area (live style) */
+        .preview-area {
+            background: #fdf2f8;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .preview-title {
+            font-weight: 800;
+            color: #9d174d;
+            border-left: 4px solid #db2777;
+            padding-left: 10px;
+            margin-bottom: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                flex-direction: column;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tool-group {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="song-container">
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="tool-group">
+            <span class="tool-label">Font Size</span>
+            <input type="range" id="fontSizeSlider" min="8" max="20" value="12" style="width: 120px;">
+            <span id="fontSizeValue">12px</span>
+        </div>
+        <div class="tool-group">
+            <span class="tool-label">Font Color</span>
+            <input type="color" id="fontColorPicker" value="#000000">
+        </div>
+        <div class="tool-group">
+            <span class="tool-label">Paper Size</span>
+            <select id="paperSizeSelect" class="tool-select">
+                <option value="a4">A4</option>
+                <option value="short">Short (8.5x11)</option>
+                <option value="long">Long (8.5x13)</option>
+            </select>
+        </div>
+        <div class="tool-group">
+            <button class="btn-back" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="btn-save" id="saveBtn"><i class="fas fa-save"></i> Save Song</button>
+        </div>
+    </div>
+
+    <!-- Bond Paper (horizontal scroll wrapper) -->
+    <div class="bond-paper-wrapper">
+        <div id="bondPaper" class="bond-paper a4">
+            <!-- Form fields (two columns inside bond paper) -->
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Select Lineup (optional)</label>
+                <select id="lineupSelect" class="form-select">
+                    <option value="">-- None / Custom --</option>
+                </select>
+            </div>
+
+            <div id="songSelectGroup" style="display: none;" class="form-group">
+                <label><i class="fas fa-music"></i> Choose Song from this Lineup</label>
+                <select id="songFromLineup" class="form-select">
+                    <option value="">-- Select a song from this lineup --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Song Title *</label>
+                <input type="text" id="songTitle" class="form-control" placeholder="e.g., Way Maker" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Key</label>
+                        <input type="text" id="songKey" class="form-control" placeholder="e.g., G, C, D">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Tempo</label>
+                        <input type="text" id="songTempo" class="form-control" placeholder="e.g., 72 BPM">
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-columns">
+                <div class="column">
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Lyrics</label>
+                        <textarea id="lyrics" class="form-control" placeholder="Enter lyrics line by line..."></textarea>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="form-group">
+                        <label><i class="fas fa-guitar"></i> Chords / Notes</label>
+                        <textarea id="chords" class="form-control" placeholder="Enter chords or musical notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live preview (optional visual) -->
+            <div class="preview-area" id="previewArea">
+                <div class="preview-title">Preview (current styles)</div>
+                <div id="previewContent" style="font-size:12px; color:#000;">
+                    <strong>Lyrics will appear here</strong><br>
+                    (styled with font size & color)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="messageArea"></div>
+</div>
+
+<!-- Loading Toast (success/animation) -->
+<div id="loadingToast" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.8); color: white; padding: 20px 30px; border-radius: 60px; z-index: 9999; align-items: center; gap: 12px;">
+    <i class="fas fa-spinner fa-spin"></i> <span>Saving...</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="navbar_music.js"></script>
+
+<script>
+    const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUserId = null;
+
+    try {
+        const session = localStorage.getItem('mcb_user_session') || sessionStorage.getItem('mcb_user_session');
+        if (session) currentUserId = JSON.parse(session).id;
+    } catch(e) {}
+
+    let allLineups = [];
+    let currentSongSuggestions = []; // for the "choose from lineup" dropdown
+
+    // Helper: escape HTML
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+
+    // Fetch all lineups for dropdown
+    async function fetchLineups() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('music_lineups')
+                .select('lineup_id, worship_leader, service_date, opening_song, welcome_song, praise_songs, worship_songs, closing_song')
+                .order('service_date', { ascending: false });
+            if (error) throw error;
+            allLineups = data || [];
+            const select = document.getElementById('lineupSelect');
+            select.innerHTML = '<option value="">-- None / Custom --</option>';
+            allLineups.forEach(lineup => {
+                const opt = document.createElement('option');
+                opt.value = lineup.lineup_id;
+                opt.textContent = `${lineup.lineup_id} - ${lineup.worship_leader} (${lineup.service_date})`;
+                select.appendChild(opt);
+            });
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    // When lineup changes, build the song suggestions from that lineup's flow
+    async function onLineupChange(lineupId) {
+        const songSelectGroup = document.getElementById('songSelectGroup');
+        const songSelect = document.getElementById('songFromLineup');
+        if (!lineupId) {
+            songSelectGroup.style.display = 'none';
+            return;
+        }
+        const lineup = allLineups.find(l => l.lineup_id === lineupId);
+        if (!lineup) return;
+        const suggestions = [];
+        if (lineup.opening_song) suggestions.push({ type: 'Opening Song', title: lineup.opening_song });
+        if (lineup.welcome_song) suggestions.push({ type: 'Welcome Song', title: lineup.welcome_song });
+        if (lineup.praise_songs && Array.isArray(lineup.praise_songs)) {
+            lineup.praise_songs.forEach((song, idx) => suggestions.push({ type: `Praise Song ${idx+1}`, title: song }));
+        }
+        if (lineup.worship_songs && Array.isArray(lineup.worship_songs)) {
+            lineup.worship_songs.forEach((song, idx) => suggestions.push({ type: `Worship Song ${idx+1}`, title: song }));
+        }
+        if (lineup.closing_song) suggestions.push({ type: 'Closing Song', title: lineup.closing_song });
+        currentSongSuggestions = suggestions;
+        songSelect.innerHTML = '<option value="">-- Select a song from this lineup --</option>';
+        suggestions.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.title;
+            opt.textContent = `${s.type}: ${s.title}`;
+            songSelect.appendChild(opt);
+        });
+        songSelectGroup.style.display = 'block';
+    }
+
+    document.getElementById('lineupSelect').addEventListener('change', (e) => {
+        onLineupChange(e.target.value);
+    });
+
+    document.getElementById('songFromLineup').addEventListener('change', (e) => {
+        const title = e.target.value;
+        if (title) {
+            document.getElementById('songTitle').value = title;
+        }
+    });
+
+    // Preview sync (real-time)
+    function updatePreview() {
+        const fontSize = document.getElementById('fontSizeSlider').value;
+        const fontColor = document.getElementById('fontColorPicker').value;
+        const lyrics = document.getElementById('lyrics').value;
+        const chords = document.getElementById('chords').value;
+        const previewDiv = document.getElementById('previewContent');
+        previewDiv.style.fontSize = fontSize + 'px';
+        previewDiv.style.color = fontColor;
+        previewDiv.innerHTML = `<strong>Lyrics:</strong><br>${escapeHtml(lyrics).replace(/\n/g, '<br>')}<br><br><strong>Chords/Notes:</strong><br>${escapeHtml(chords).replace(/\n/g, '<br>')}`;
+    }
+
+    document.getElementById('fontSizeSlider').addEventListener('input', (e) => {
+        document.getElementById('fontSizeValue').innerText = e.target.value + 'px';
+        updatePreview();
+    });
+    document.getElementById('fontColorPicker').addEventListener('input', updatePreview);
+    document.getElementById('lyrics').addEventListener('input', updatePreview);
+    document.getElementById('chords').addEventListener('input', updatePreview);
+
+    function updatePaperSize() {
+        const paper = document.getElementById('bondPaper');
+        const size = document.getElementById('paperSizeSelect').value;
+        paper.classList.remove('a4', 'short', 'long');
+        paper.classList.add(size);
+    }
+    document.getElementById('paperSizeSelect').addEventListener('change', updatePaperSize);
+
+    // Save song
+    async function saveSong() {
+        const title = document.getElementById('songTitle').value.trim();
+        if (!title) {
+            alert('Please enter a song title.');
+            return;
+        }
+        const lyrics = document.getElementById('lyrics').value;
+        const chords = document.getElementById('chords').value;
+        const key = document.getElementById('songKey').value;
+        const tempo = document.getElementById('songTempo').value;
+        const lineupId = document.getElementById('lineupSelect').value || null;
+
+        const songId = `SONG-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+        const saveData = {
+            song_id: songId,
+            title,
+            lyrics,
+            chords,
+            key: key || null,
+            tempo: tempo || null,
+            lineup_id: lineupId,
+            user_id: currentUserId,
+            created_at: new Date().toISOString()
+        };
+
+        const toast = document.getElementById('loadingToast');
+        toast.style.display = 'flex';
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = true;
+        try {
+            // Check if songs table exists (if not, show error)
+            const { error: tableCheck } = await supabaseClient.from('songs').select('count', { count: 'exact', head: true });
+            if (tableCheck && tableCheck.code === '42P01') {
+                throw new Error('The "songs" table does not exist. Please run the SQL script first.');
+            }
+            const { error } = await supabaseClient.from('songs').insert([saveData]);
+            if (error) throw error;
+            // Success animation
+            toast.innerHTML = '<i class="fas fa-check-circle"></i> Song Saved!';
+            toast.style.background = '#10b981';
+            setTimeout(() => {
+                toast.style.display = 'none';
+                if (confirm('Song saved successfully! Do you want to add another song?')) {
+                    // reset form
+                    document.getElementById('songTitle').value = '';
+                    document.getElementById('lyrics').value = '';
+                    document.getElementById('chords').value = '';
+                    document.getElementById('songKey').value = '';
+                    document.getElementById('songTempo').value = '';
+                    document.getElementById('lineupSelect').value = '';
+                    document.getElementById('songSelectGroup').style.display = 'none';
+                    updatePreview();
+                } else {
+                    window.location.href = 'lyrics_music.html';
+                }
+            }, 1500);
+        } catch (err) {
+            toast.style.background = '#dc2626';
+            toast.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error: ' + err.message;
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            console.error(err);
+        } finally {
+            saveBtn.disabled = false;
+            setTimeout(() => {
+                if (toast.style.background !== '#10b981') toast.style.display = 'none';
+            }, 3000);
+        }
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', saveSong);
+    document.getElementById('backBtn').addEventListener('click', () => {
+        window.location.href = 'lyrics_music.html';
+    });
+
+    // Initialization
+    async function init() {
+        if (!currentUserId) {
+            alert('Please login first.');
+            window.location.href = '../login.html';
+            return;
+        }
+        await fetchLineups();
+        updatePreview();
+        updatePaperSize();
+    }
+    init();
+</script>
+</body>
+</html>
