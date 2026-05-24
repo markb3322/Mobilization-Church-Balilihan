@@ -1,1 +1,427 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Add Sunday Program | MCB Portal</title>
+    
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              }
+            },
+            fontFamily: {
+              'jakarta': ['Plus Jakarta Sans', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc; /* light background */
+        }
+        .input-style {
+            @apply w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all;
+        }
+        .section-divider {
+            @apply text-center my-6 relative;
+        }
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(59,130,246,0.3), transparent);
+            z-index: 0;
+        }
+        .section-divider span {
+            @apply relative z-10 bg-white px-6 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-blue-600 border border-blue-100;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-jakarta">
+
+    <!-- Navbar injection -->
+    <div id="navbar-container"></div>
+
+    <!-- Main container -->
+    <main class="max-w-3xl mx-auto px-4 py-8 animate-fade-in">
+        <!-- Alert placeholder -->
+        <div id="alertMessage"></div>
+
+        <!-- Form card (white glass) -->
+        <div class="bg-white/90 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
+            <form id="programForm">
+                <!-- Header: MC Name & Service Date -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">MC Name</label>
+                        <input type="text" id="mcInput" name="mc_name" class="input-style" placeholder="Type MC Name..." required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Service Date</label>
+                        <input type="date" id="serviceDate" name="service_date" class="input-style" required>
+                    </div>
+                </div>
+
+                <h2 class="text-center text-2xl font-extrabold text-slate-800 mb-6">Program Flow</h2>
+
+                <!-- Sunday School Section -->
+                <div class="section-divider"><span>Sunday School</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Sunday Teacher</label>
+                    <input type="text" id="sundayTeacher" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- Sunday Service Section -->
+                <div class="section-divider"><span>Sunday Service</span></div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-start">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right pt-2">Welcome Address</label>
+                    <textarea id="welcomeAddress" class="input-style" rows="2" placeholder="Edit content here..."></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-start">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right pt-2">Testimony</label>
+                    <textarea id="testimony" class="input-style" rows="2" placeholder="Edit content here..."></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-center">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Bible Scriptures</label>
+                    <input type="text" id="bibleScriptures" class="input-style" placeholder="Edit Verse...">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-center">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Opening Song</label>
+                    <input type="text" id="openingSong" class="input-style" placeholder="Edit Title...">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-center">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Opening Prayer</label>
+                    <input type="text" id="openingPrayer" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- Praise and Worship Section -->
+                <div class="section-divider"><span>Praise and Worship</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Worship Lead</label>
+                    <input type="text" id="worshipLead" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- The Word of God Section -->
+                <div class="section-divider"><span>The Word of God</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Speaker</label>
+                    <input type="text" id="speaker" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- Holy Communion Section (Optional) -->
+                <div class="section-divider"><span>The Holy Communion <small class="text-slate-400 font-normal">(Optional)</small></span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Pastor</label>
+                    <input type="text" id="holyCommunionPastor" class="input-style" placeholder="Skip or Edit Name...">
+                </div>
+
+                <!-- Tithes and Offering Section -->
+                <div class="section-divider"><span>Tithes and Offering</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Presentation</label>
+                    <input type="text" id="presentation" class="input-style" placeholder="Edit Details...">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Offering Prayer</label>
+                    <input type="text" id="offeringPrayer" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- Public Announcement Section -->
+                <div class="section-divider"><span>Public Announcement</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Announcement</label>
+                    <input type="text" id="announcementInput" class="input-style bg-slate-50" placeholder="Auto: MC Name will appear here" readonly>
+                </div>
+
+                <!-- Closing Services Section -->
+                <div class="section-divider"><span>Closing Services</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Closing Song</label>
+                    <input type="text" id="closingSong" class="input-style" placeholder="Edit Title...">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center mb-4">
+                    <label class="text-sm font-semibold text-slate-600 sm:text-right">Closing Prayer</label>
+                    <input type="text" id="closingPrayer" class="input-style" placeholder="Edit Name...">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-8">
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                        <i class="fas fa-save"></i> Submit Program
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-[9999] p-4" onclick="event.target===this && hideModal()">
+        <div id="loadingContent" class="bg-white border border-slate-200 rounded-3xl p-8 text-center shadow-2xl animate-fade-in max-w-sm w-full">
+            <!-- Dynamic content injected by JS -->
+            <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" id="spinnerIcon"></div>
+            <h4 class="text-slate-800 font-bold text-lg mb-1" id="modalTitle">Saving Program...</h4>
+            <p class="text-slate-500 text-sm" id="modalMessage">Please wait</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="navbar_program.js"></script>
+
+    <script>
+        (function() {
+            const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+            
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            let currentUserId = null;
+            
+            try {
+                const session = localStorage.getItem('mcb_user_session') || sessionStorage.getItem('mcb_user_session');
+                if (session) {
+                    const user = JSON.parse(session);
+                    currentUserId = user.id;
+                    console.log("User logged in:", currentUserId);
+                } else {
+                    console.log("No user session found");
+                }
+            } catch(e) {
+                console.log("Error reading session:", e);
+            }
+            
+            const mcInput = document.getElementById('mcInput');
+            const announcementInput = document.getElementById('announcementInput');
+            if (mcInput && announcementInput) {
+                mcInput.addEventListener('input', function() {
+                    announcementInput.value = this.value.trim() ? "MC: " + this.value : "";
+                });
+            }
+            
+            function setDefaultDate() {
+                const today = new Date().toISOString().split('T')[0];
+                const serviceDate = document.getElementById('serviceDate');
+                if (serviceDate) serviceDate.value = today;
+            }
+            setDefaultDate();
+            
+            function generateProgramId() {
+                const year = new Date().getFullYear();
+                const random = Math.floor(Math.random() * 10000).toString().padStart(5, '0');
+                return `PROGRAM-${year}-${random}`;
+            }
+            
+            function showAlert(message, type = 'success') {
+                const alertDiv = document.getElementById('alertMessage');
+                if (!alertDiv) return;
+                const bgColors = {
+                    success: 'bg-green-100 border-green-300 text-green-800',
+                    warning: 'bg-yellow-100 border-yellow-300 text-yellow-800',
+                    danger: 'bg-red-100 border-red-300 text-red-800'
+                };
+                const icons = {
+                    success: 'fa-check-circle',
+                    warning: 'fa-exclamation-circle',
+                    danger: 'fa-exclamation-circle'
+                };
+                alertDiv.innerHTML = `
+                    <div class="flex items-center gap-3 px-5 py-3 rounded-xl border ${bgColors[type]} mb-4 animate-fade-in">
+                        <i class="fas ${icons[type]}"></i>
+                        <span class="text-sm font-medium">${message}</span>
+                    </div>
+                `;
+                setTimeout(() => {
+                    alertDiv.innerHTML = '';
+                }, 5000);
+            }
+            
+            function showModal(type, message) {
+                const modal = document.getElementById('loadingModal');
+                const spinner = document.getElementById('spinnerIcon');
+                const title = document.getElementById('modalTitle');
+                const msg = document.getElementById('modalMessage');
+                
+                if (!modal) return;
+                
+                if (type === 'loading') {
+                    spinner.className = 'w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4';
+                    title.textContent = 'Saving Program...';
+                    msg.textContent = 'Please wait';
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                } else if (type === 'success') {
+                    spinner.className = 'w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4';
+                    spinner.innerHTML = '<i class="fas fa-check text-white text-2xl"></i>';
+                    title.textContent = 'Success!';
+                    msg.textContent = 'Program saved successfully!';
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }, 2000);
+                } else if (type === 'error') {
+                    spinner.className = 'w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4';
+                    spinner.innerHTML = '<i class="fas fa-times text-white text-2xl"></i>';
+                    title.textContent = 'Error!';
+                    msg.textContent = message || 'Something went wrong';
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }, 3000);
+                }
+            }
+            
+            window.hideModal = function() {
+                const modal = document.getElementById('loadingModal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+            
+            async function saveProgram() {
+                if (!currentUserId) {
+                    showAlert('Please login first to save programs.', 'warning');
+                    return false;
+                }
+                
+                const mcNameValue = document.getElementById('mcInput')?.value || '';
+                if (!mcNameValue) {
+                    showAlert('Please enter MC Name.', 'warning');
+                    return false;
+                }
+                
+                const serviceDateValue = document.getElementById('serviceDate')?.value || '';
+                if (!serviceDateValue) {
+                    showAlert('Please select service date.', 'warning');
+                    return false;
+                }
+                
+                const programId = generateProgramId();
+                const announcementValue = document.getElementById('announcementInput')?.value || '';
+                
+                const programData = {
+                    program_id: programId,
+                    user_id: currentUserId,
+                    mc_name: mcNameValue,
+                    service_date: serviceDateValue,
+                    program_flow: '',
+                    sunday_school_teacher: document.getElementById('sundayTeacher')?.value || '',
+                    welcome_message: document.getElementById('welcomeAddress')?.value || '',
+                    testimony_verse: document.getElementById('testimony')?.value || '',
+                    bible_reader_name: document.getElementById('bibleScriptures')?.value || '',
+                    worship_team: document.getElementById('openingSong')?.value || '',
+                    prayer_leader_name: document.getElementById('openingPrayer')?.value || '',
+                    worship_lead_name: document.getElementById('worshipLead')?.value || '',
+                    host_pastor_name: document.getElementById('speaker')?.value || '',
+                    officiating_pastor_name: document.getElementById('holyCommunionPastor')?.value || '',
+                    exhortation_name: document.getElementById('presentation')?.value || '',
+                    presentation_name: document.getElementById('offeringPrayer')?.value || '',
+                    prayer_tithes_name: '',
+                    announcement: announcementValue,
+                    closing_worship_team: document.getElementById('closingSong')?.value || '',
+                    closing_prayer_name: document.getElementById('closingPrayer')?.value || '',
+                    mc_name_auto: announcementValue,
+                    bible_verse_footer: "Psalm 150:1",
+                    created_at: new Date().toISOString()
+                };
+                
+                try {
+                    try {
+                        await supabaseClient.rpc('set_app_current_user', { user_id: currentUserId });
+                    } catch(rpcError) {
+                        console.log("RPC not available, continuing without it");
+                    }
+                    
+                    const { data, error } = await supabaseClient.from('church_programs').insert([programData]).select();
+                    
+                    if (error) {
+                        let errorMessage = error.message || 'Unknown database error';
+                        if (error.code === '23505') errorMessage = 'Duplicate program ID. Please try again.';
+                        else if (error.message.includes('row-level security')) errorMessage = 'RLS policy violation. Please run the SQL script to fix RLS policies.';
+                        showModal('error', errorMessage);
+                        showAlert('Error: ' + errorMessage, 'danger');
+                        return false;
+                    }
+                    
+                    console.log('Program saved:', data);
+                    return true;
+                } catch (err) {
+                    console.error('Save error:', err);
+                    showModal('error', 'Network or database connection error');
+                    showAlert('Error: Network or database connection error', 'danger');
+                    return false;
+                }
+            }
+            
+            const programForm = document.getElementById('programForm');
+            if (programForm) {
+                programForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const submitBtn = document.getElementById('submitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+                    }
+                    
+                    showModal('loading');
+                    const success = await saveProgram();
+                    
+                    if (success) {
+                        showModal('success');
+                        showAlert('Program submitted successfully!', 'success');
+                        programForm.reset();
+                        setDefaultDate();
+                        if (mcInput) mcInput.value = '';
+                        if (announcementInput) announcementInput.value = '';
+                    }
+                    
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Submit Program';
+                    }
+                });
+            }
+            
+            if (!currentUserId) {
+                showAlert('Please login to add programs. Redirecting to login page...', 'warning');
+                setTimeout(() => {
+                    window.location.href = '../login.html';
+                }, 3000);
+            }
+        })();
+    </script>
+</body>
+</html>
