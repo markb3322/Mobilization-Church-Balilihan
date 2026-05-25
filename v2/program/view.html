@@ -1,1 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Member Profile | MCB Portal</title>
 
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              }
+            },
+            fontFamily: {
+              'jakarta': ['Plus Jakarta Sans', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f8fafc;
+        }
+        .cover-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="font-jakarta text-slate-700">
+
+    <!-- Navbar (injects the program navbar) -->
+    <div id="navbar-container"></div>
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Back button -->
+        <a href="javascript:history.back()" class="inline-flex items-center gap-2 px-4 py-2 mb-4 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-full text-slate-600 hover:bg-white hover:shadow-md transition-all text-sm font-medium">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+
+        <!-- Profile card -->
+        <div id="profileRoot">
+            <!-- Loading state shown initially -->
+            <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden animate-pulse">
+                <div class="h-48 bg-slate-200"></div>
+                <div class="px-6 pb-6">
+                    <div class="flex justify-center -mt-16 mb-4">
+                        <div class="w-32 h-32 rounded-full bg-slate-300 border-4 border-white shadow-lg"></div>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="h-6 w-48 bg-slate-200 rounded mx-auto"></div>
+                        <div class="h-4 w-32 bg-slate-200 rounded mx-auto"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="h-16 bg-slate-200 rounded-xl"></div>
+                        <div class="h-16 bg-slate-200 rounded-xl"></div>
+                        <div class="h-16 bg-slate-200 rounded-xl"></div>
+                        <div class="h-16 bg-slate-200 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="navbar_program.js"></script>
+
+    <script>
+        const SUPABASE_URL = 'https://ypynnkupszfgqoxyirff.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlweW5ua3Vwc3pmZ3FveHlpcmZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczODYwNjcsImV4cCI6MjA5Mjk2MjA2N30.aHfVKPLM9Yr2ck6A8MAfXHishoq0JaCbVnHNMF0Okqk';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function getUserIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '—';
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return dateStr;
+                return d.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch(e) { return dateStr; }
+        }
+
+        function calculateAge(birthday) {
+            if (!birthday) return null;
+            const birth = new Date(birthday);
+            if (isNaN(birth.getTime())) return null;
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+            return age;
+        }
+
+        function getRoleBadge(role) {
+            const roles = {
+                'member': { label: 'Member', icon: 'fa-user', color: 'bg-blue-100 text-blue-700' },
+                'music': { label: 'Music Ministry', icon: 'fa-music', color: 'bg-purple-100 text-purple-700' },
+                'program': { label: 'Program Ministry', icon: 'fa-calendar-alt', color: 'bg-amber-100 text-amber-700' },
+                'pastor': { label: 'Pastor', icon: 'fa-church', color: 'bg-emerald-100 text-emerald-700' },
+                'officer': { label: 'Church Officer', icon: 'fa-gavel', color: 'bg-red-100 text-red-700' }
+            };
+            return roles[role] || { label: 'Member', icon: 'fa-user', color: 'bg-blue-100 text-blue-700' };
+        }
+
+        function getInitialAvatar(name) {
+            if (!name) name = 'Member';
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2);
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=667eea&color=fff&size=150&bold=true`;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]);
+        }
+
+        function renderProfile(user) {
+            const root = document.getElementById('profileRoot');
+            if (!root) return;
+
+            const coverBg = (user.background_image && user.background_image !== 'null' && user.background_image.trim() !== '')
+                ? `url('${user.background_image}') center/cover no-repeat`
+                : 'linear-gradient(135deg, #667eea, #764ba2)';
+
+            const profileImg = (user.profile_image && user.profile_image !== 'null' && user.profile_image.trim() !== '')
+                ? user.profile_image
+                : getInitialAvatar(user.full_name);
+
+            const fullName = user.full_name || 'Church Member';
+            const nickname = user.nickname ? `"${user.nickname}"` : '';
+            const roleBadge = getRoleBadge(user.role);
+            const memberSince = user.created_at ? formatDate(user.created_at) : '—';
+            const age = user.age || (user.birthday ? calculateAge(user.birthday) : null);
+
+            root.innerHTML = `
+            <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden">
+                <!-- Cover -->
+                <div class="h-48 sm:h-56 flex items-end justify-center" style="background: ${coverBg};">
+                </div>
+
+                <!-- Avatar -->
+                <div class="flex justify-center -mt-16 sm:-mt-20 mb-4">
+                    <img src="${profileImg}" alt="Profile"
+                         class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-lg object-cover bg-white"
+                         onerror="this.onerror=null;this.src='${getInitialAvatar(user.full_name)}'">
+                </div>
+
+                <!-- Name & Role -->
+                <div class="text-center px-6">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">
+                        ${escapeHtml(fullName)}
+                        ${nickname ? `<span class="text-lg font-medium text-slate-400 ml-1">${escapeHtml(nickname)}</span>` : ''}
+                    </h1>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 mt-2 rounded-full text-xs font-semibold ${roleBadge.color}">
+                        <i class="fas ${roleBadge.icon}"></i> ${escapeHtml(roleBadge.label)}
+                    </span>
+                </div>
+
+                <!-- Member since -->
+                <div class="text-center mt-3 text-sm text-slate-500">
+                    <i class="far fa-calendar-alt mr-1"></i> Member since ${memberSince}
+                </div>
+
+                <!-- Info Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6 mt-4">
+                    ${infoItem('Email', 'fa-envelope', user.email)}
+                    ${infoItem('Address', 'fa-map-pin', user.address)}
+                    ${infoItem('Birthday', 'fa-cake-candles', user.birthday ? formatDate(user.birthday) : '—')}
+                    ${infoItem('Birth Place', 'fa-globe', user.birth_place)}
+                    ${infoItem('Username', 'fa-user-circle', user.username ? '@'+user.username : '—')}
+                    ${infoItem('Age', 'fa-calendar-week', age ? age+' years old' : '—')}
+                    ${infoItem('Member ID', 'fa-id-card', user.id ? '#'+user.id : '—')}
+                    ${infoItem('Last Updated', 'fa-edit', user.updated_at ? formatDate(user.updated_at) : '—')}
+                </div>
+            </div>
+            `;
+        }
+
+        function infoItem(label, icon, value) {
+            const displayValue = value && value !== 'null' ? escapeHtml(value) : '—';
+            return `
+            <div class="flex items-start gap-3 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors">
+                <div class="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm text-brand-600">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">${label}</p>
+                    <p class="text-sm font-semibold text-slate-700 truncate">${displayValue}</p>
+                </div>
+            </div>`;
+        }
+
+        function showError(msg) {
+            const root = document.getElementById('profileRoot');
+            if (root) {
+                root.innerHTML = `
+                <div class="bg-white rounded-3xl p-8 text-center shadow-xl">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-3"></i>
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">Profile Error</h2>
+                    <p class="text-slate-500">${escapeHtml(msg)}</p>
+                    <a href="javascript:history.back()" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-slate-100 rounded-full text-slate-600 hover:bg-slate-200 transition-colors text-sm">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </a>
+                </div>`;
+            }
+        }
+
+        async function loadProfile() {
+            const userId = getUserIdFromUrl();
+            if (!userId) {
+                showError('No member ID provided. Please use ?id= in the URL.');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('church_users')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+
+                if (error) {
+                    if (error.code === 'PGRST116') showError('Member not found.');
+                    else showError('Failed to load profile: ' + error.message);
+                    return;
+                }
+                if (!data) {
+                    showError('No profile data available.');
+                    return;
+                }
+                renderProfile(data);
+            } catch (err) {
+                showError('Network error. Please check your connection.');
+                console.error(err);
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>
